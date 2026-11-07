@@ -1092,3 +1092,11 @@ img {
 .image-caption{font-size:11px;color:var(--muted);line-height:1.5}
 .arrears-policy{max-width:900px;margin:auto;border-left:4px solid var(--red)}
 @media(max-width:760px){.operations-feature,.response-grid{grid-template-columns:1fr}.operations-copy,.response-copy,.arrears-policy{padding:21px}}
+
+
+/* Official Koetsa identity */
+.brand-logo{display:block;width:150px;max-width:32vw;height:auto;object-fit:contain;border-radius:4px}
+.site-header .brand,.site-footer .brand{gap:12px}
+.site-header .brand-logo{width:138px}
+.site-footer .brand-logo{width:128px}
+@media(max-width:700px){.site-header .brand-logo{width:112px}.site-footer .brand-logo{width:112px}}

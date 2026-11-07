@@ -144,7 +144,13 @@ create table if not exists public.subscriptions (
 );
 create or replace function public.set_subscription_package_rates() returns trigger language plpgsql as $$
 begin
-  case new.package_code when 'm1500' then new.once_off_amount := 800;new.monthly_amount := 99 when 'm2500' then new.once_off_amount := 1200;new.monthly_amount := 120 when 'm3000' then new.once_off_amount := 1300;new.monthly_amount := 130 when 'm3500' then new.once_off_amount := 1500;new.monthly_amount := 150 else raise exception 'Invalid package code.'; end case;
+  case new.package_code
+    when 'm1500' then new.once_off_amount := 800; new.monthly_amount := 75;
+    when 'm2500' then new.once_off_amount := 1200; new.monthly_amount := 120;
+    when 'm3000' then new.once_off_amount := 1300; new.monthly_amount := 130;
+    when 'm3500' then new.once_off_amount := 1500; new.monthly_amount := 150;
+    else raise exception 'Invalid package code.';
+  end case;
   new.contract_months=24;
   if new.start_date is not null then new.end_date=(new.start_date + interval '24 months')::date - 1; end if;
   return new;
@@ -203,7 +209,7 @@ begin
   if v_package not in ('m1500','m2500','m3000','m3500') then raise exception 'Invalid package.'; end if;
   if v_payment not in ('monthly','upfront') then raise exception 'Invalid payment option.'; end if;
   if coalesce((p_payload->>'consent')::boolean,false) is not true then raise exception 'Customer consent is required.'; end if;
-  case v_package when 'm1500' then v_setup := 800;v_monthly := 99 when 'm2500' then v_setup := 1200;v_monthly := 120 when 'm3000' then v_setup := 1300;v_monthly := 130 else v_setup := 1500;v_monthly := 150 end case;
+  case v_package when 'm1500' then v_setup := 800;v_monthly := 75 when 'm2500' then v_setup := 1200;v_monthly := 120 when 'm3000' then v_setup := 1300;v_monthly := 130 else v_setup := 1500;v_monthly := 150 end case;
   insert into public.customers(full_name,phone,email,town,address) values(v_name,v_phone,v_email,nullif(left(trim(coalesce(p_payload->>'town','')),100),''),nullif(left(trim(coalesce(p_payload->>'address','')),250),'')) returning id into v_customer;
   insert into public.leads(customer_id,customer_name,customer_phone,customer_email,town,package_code,payment_option,once_off_amount,monthly_amount,vehicle_count,vehicle_summary,vin,preferred_installation_location,preferred_installation_date,notes,consent_at)
   values(v_customer,v_name,v_phone,v_email,nullif(left(trim(coalesce(p_payload->>'town','')),100),''),v_package,v_payment,v_setup,v_monthly,greatest(1,least(100,coalesce(nullif(p_payload->>'vehicleCount','')::integer,1))),nullif(left(trim(coalesce(p_payload->>'vehicle','')),300),''),nullif(left(trim(coalesce(p_payload->>'vin','')),80),''),nullif(left(trim(coalesce(p_payload->>'location','')),150),''),nullif(p_payload->>'date','')::date,nullif(left(trim(coalesce(p_payload->>'notes','')),1500),''),now()) returning id,application_ref into v_lead,v_ref;
@@ -227,7 +233,7 @@ begin
   if length(v_name)<2 or length(v_phone)<6 then raise exception 'Name and valid phone number are required.'; end if;
   if v_package not in ('m1500','m2500','m3000','m3500') or v_payment not in ('monthly','upfront') then raise exception 'Select a valid package and payment option.'; end if;
   if coalesce((p_payload->>'consent')::boolean,false) is not true then raise exception 'Customer contact consent must be confirmed.'; end if;
-  case v_package when 'm1500' then v_setup := 800;v_monthly := 99 when 'm2500' then v_setup := 1200;v_monthly := 120 when 'm3000' then v_setup := 1300;v_monthly := 130 else v_setup := 1500;v_monthly := 150 end case;
+  case v_package when 'm1500' then v_setup := 800;v_monthly := 75 when 'm2500' then v_setup := 1200;v_monthly := 120 when 'm3000' then v_setup := 1300;v_monthly := 130 else v_setup := 1500;v_monthly := 150 end case;
   v_creator=auth.uid();
   if public.staff_has_role(array['sales_consultant']::public.staff_role[]) then v_assignee=auth.uid(); end if;
   insert into public.customers(full_name,phone,email,town,address) values(v_name,v_phone,v_email,nullif(left(trim(coalesce(p_payload->>'town','')),100),''),nullif(left(trim(coalesce(p_payload->>'address','')),250),'')) returning id into v_customer;

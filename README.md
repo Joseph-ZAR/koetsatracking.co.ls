@@ -20,16 +20,16 @@ This package keeps the existing static public website separate from the private 
 
 | Package | Once-off installation + admin | Monthly | 24-month total |
 |---|---:|---:|---:|
-| M1500 — Track & Trace | M800 | M99 | M3,176 |
+| M1500 — Track & Trace | M800 | M75 | M2,600 |
 | M2500 — Security & Control | M1,200 | M120 | M4,080 |
 | M3000 — Fleet & Driver Intelligence | M1,300 | M130 | M4,420 |
 | M3500 — Premium Recovery & Response | M1,500 | M150 | M5,100 |
 
-Both payment options retain the same benefits and features. The monthly option is the once-off fee followed by 24 monthly payments; the upfront option is the full once-off fee plus all 24 monthly payments. No discount is applied.
+The upfront option is the once-off package price and does not include ongoing Koetsa Operations Centre monitoring or coordinated SOS response. The monthly option is the installation/admin fee followed by 24 monthly service payments and includes the ongoing subscription benefits while the account is active.
 
 ## Setup required before live use
 
-1. **Existing Supabase project:** the Koetsa database migration was already executed successfully. Do not run it again on the existing project. The corrected migration is retained under `supabase/migrations/` for version history and for a separate, newly provisioned environment.
+1. **Existing Supabase project:** do not rerun the original migration on the existing project. Apply only the new additive migration `002_workforce_and_pricing_correction.sql` as described below.
 2. The supplied `portal/config.js` and `assets/js/public-config.js` contain the Koetsa project URL and browser-safe publishable key. Never replace these with a service-role key or database password.
 3. Deploy the contents of this folder to the root of the existing GitHub Pages repository. Preserve the `CNAME` file and publish from the same branch/folder already configured in GitHub Pages. The staff portal will be at `/portal/`.
 4. In Supabase Authentication settings, disable public user sign-ups. Staff must be invited by an administrator.
@@ -42,7 +42,7 @@ Both payment options retain the same benefits and features. The monthly option i
    where id = 'AUTH-USER-UUID-HERE';
    ```
 
-7. Sign in at `/portal/`. A Super Admin can activate invited staff and manage their roles in Staff & Access.
+7. Sign in at `/portal/`. The Super Admin and General Manager can invite staff, update employment details and activate/suspend staff in Staff & Workforce. Only a Super Admin can create or modify another Super Admin.
 8. Test separate accounts for each role before entering real customer records. Confirm the portal is accessed only over HTTPS.
 
 ## Security model and important limits
@@ -59,3 +59,60 @@ Both payment options retain the same benefits and features. The monthly option i
 ## Development note
 
 This is a static front end backed by Supabase Auth/Postgres/RLS. The Supabase project must be configured and deployed before sign-in or persistent application storage works. No credentials, staff accounts or customer data are included in this package.
+
+
+## Workforce portal upgrade (November 2026)
+
+The update adds:
+- Official Koetsa logo to the public site and staff portal.
+- Staff directory with contact details, department, job title and employment start date.
+- In-portal employee invitations by email. New accounts are created inactive and must be activated by management.
+- General Manager and Super Admin staff administration. A General Manager cannot create, edit, demote or suspend a Super Admin; only a Super Admin can do that.
+- Existing employee lead registration remains available. Sales staff can submit their own leads; the existing database access rules limit their view to leads they created or were assigned.
+- Super Admin and General Manager retain company-wide visibility of leads and customer records.
+- Correct Track & Trace subscription rate of M75/month and M2,600 total over 24 months. The other package rates remain unchanged.
+- Duplicate phone/email check when a staff member submits a new lead. If a customer already exists, the employee is directed to management rather than creating a duplicate.
+
+### Apply the database update safely
+
+1. Make a backup of the Supabase project before changing the database.
+2. Open Supabase → SQL Editor.
+3. Open `supabase/migrations/002_workforce_and_pricing_correction.sql` from this package, copy its complete contents into a new SQL query, and run it once.
+4. Do not run `001_koetsa_operations.sql` again on the existing project. Migration 002 is an additive correction and does not delete customer, lead, vehicle, subscription or payment records.
+5. New Track & Trace monthly subscriptions use M75. This migration does not rewrite historical subscription rows or existing signed agreements.
+
+### Enable staff invitations
+
+The invitation feature uses a Supabase Edge Function. Its service-role key stays on Supabase's server and is never added to `portal/config.js`, `assets/js/public-config.js`, or GitHub.
+
+On Ubuntu, after installing the Supabase CLI and authenticating:
+
+```bash
+supabase login
+supabase link --project-ref gmpykbgjwbhpqyqhsvoj
+supabase secrets set SUPABASE_SERVICE_ROLE_KEY=YOUR_SERVICE_ROLE_KEY
+supabase functions deploy koetsa-invite-staff
+```
+
+Get the service-role key from Supabase Project Settings → API Keys / API. Do not paste it into ChatGPT, a website file, GitHub, or a screenshot. Paste it only into the terminal command when setting the Supabase secret. If your Supabase dashboard provides a function secret editor, you may set the same secret there instead.
+
+The function checks the signed-in caller against the active staff profile. Only the Super Admin and General Manager can invite employees. The server sends the invitation email and creates an inactive staff profile. The employee sets their own password from the invitation email.
+
+### Publish the website and portal
+
+1. Copy the updated website and portal files from this package into your local GitHub repository, keeping the existing `CNAME` file and `portal/config.js`.
+2. Commit and push the changes to the branch already used by GitHub Pages.
+3. Wait for the GitHub Pages deployment action to finish.
+4. Test the website and `/portal/` over HTTPS.
+5. Sign in as Super Admin or General Manager, open Staff & Workforce, and invite one test employee before inviting the rest of the team.
+6. Confirm the invitation email arrives, the employee can set a password, and management can activate the profile.
+7. Sign in as the test employee and register a test lead. Confirm that the employee sees their own lead and management can see the same lead and linked customer.
+8. Test suspension: deactivate the test employee and confirm they can no longer enter the portal.
+
+### Important operational notes
+
+- Existing profile, customer and lead data is preserved.
+- Existing signed contracts should not be repriced retroactively. The M75 rate applies to new Track & Trace subscriptions after the migration.
+- A manager should verify the employee's invitation acceptance before activating the profile.
+- The portal does not yet store uploaded identity documents or attachments. This release covers employee accounts and structured lead/customer data entry; secure document uploads should be added as a separate storage feature with file-type, size and access controls.
+- The invitation function sends Supabase Auth invitation emails. Configure the project's SMTP/email templates and allowed redirect URLs in Supabase Authentication settings before production use.
