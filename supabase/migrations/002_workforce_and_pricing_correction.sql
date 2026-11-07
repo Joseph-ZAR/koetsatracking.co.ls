@@ -20,10 +20,18 @@ create or replace function public.set_subscription_package_rates()
 returns trigger language plpgsql security definer set search_path=public as $$
 begin
   case new.package_code
-    when 'm1500' then new.once_off_amount := 800; new.monthly_amount := 75;
-    when 'm2500' then new.once_off_amount := 1200; new.monthly_amount := 120;
-    when 'm3000' then new.once_off_amount := 1300; new.monthly_amount := 130;
-    when 'm3500' then new.once_off_amount := 1500; new.monthly_amount := 150;
+    when 'm1500' then
+      if new.payment_option = 'upfront' then new.once_off_amount := 1500; new.monthly_amount := 0;
+      else new.once_off_amount := 800; new.monthly_amount := 75; end if;
+    when 'm2500' then
+      if new.payment_option = 'upfront' then new.once_off_amount := 2500; new.monthly_amount := 0;
+      else new.once_off_amount := 1200; new.monthly_amount := 120; end if;
+    when 'm3000' then
+      if new.payment_option = 'upfront' then new.once_off_amount := 3000; new.monthly_amount := 0;
+      else new.once_off_amount := 1300; new.monthly_amount := 130; end if;
+    when 'm3500' then
+      if new.payment_option = 'upfront' then new.once_off_amount := 3500; new.monthly_amount := 0;
+      else new.once_off_amount := 1500; new.monthly_amount := 150; end if;
     else raise exception 'Invalid package code.';
   end case;
   new.contract_months := 24;
@@ -35,7 +43,7 @@ end; $$;
 
 drop trigger if exists enforce_subscription_package_rates on public.subscriptions;
 create trigger enforce_subscription_package_rates
-before insert or update of package_code,once_off_amount,monthly_amount,contract_months,start_date,end_date
+before insert or update of package_code,payment_option,once_off_amount,monthly_amount,contract_months,start_date,end_date
 on public.subscriptions for each row execute function public.set_subscription_package_rates();
 
 -- Update the two existing application RPCs in-place without changing their validation,
@@ -45,10 +53,24 @@ declare f text;
 begin
   f := pg_get_functiondef('public.submit_koetsa_application(jsonb)'::regprocedure);
   f := replace(f, 'v_monthly := 99', 'v_monthly := 75');
+  f := replace(f, 'case v_package when ''m1500'' then v_setup := 800;v_monthly := 75 when ''m2500'' then v_setup := 1200;v_monthly := 120 when ''m3000'' then v_setup := 1300;v_monthly := 130 else v_setup := 1500;v_monthly := 150 end case;', 'case v_package
+    when ''m1500'' then if v_payment=''upfront'' then v_setup := 1500; v_monthly := 0; else v_setup := 800; v_monthly := 75; end if;
+    when ''m2500'' then if v_payment=''upfront'' then v_setup := 2500; v_monthly := 0; else v_setup := 1200; v_monthly := 120; end if;
+    when ''m3000'' then if v_payment=''upfront'' then v_setup := 3000; v_monthly := 0; else v_setup := 1300; v_monthly := 130; end if;
+    else if v_payment=''upfront'' then v_setup := 3500; v_monthly := 0; else v_setup := 1500; v_monthly := 150; end if;
+  end case;');
+  if position('case v_package when ''m1500'' then v_setup := 800;v_monthly := 75 when ''m2500'' then v_setup := 1200;v_monthly := 120 when ''m3000'' then v_setup := 1300;v_monthly := 130 else v_setup := 1500;v_monthly := 150 end case;' in f)>0 then raise exception 'Could not correct payment-option pricing.'; end if;
   if position('v_monthly := 99' in f)>0 then raise exception 'Could not update public application Track & Trace rate.'; end if;
   execute f;
   f := pg_get_functiondef('public.register_staff_lead(jsonb)'::regprocedure);
   f := replace(f, 'v_monthly := 99', 'v_monthly := 75');
+  f := replace(f, 'case v_package when ''m1500'' then v_setup := 800;v_monthly := 75 when ''m2500'' then v_setup := 1200;v_monthly := 120 when ''m3000'' then v_setup := 1300;v_monthly := 130 else v_setup := 1500;v_monthly := 150 end case;', 'case v_package
+    when ''m1500'' then if v_payment=''upfront'' then v_setup := 1500; v_monthly := 0; else v_setup := 800; v_monthly := 75; end if;
+    when ''m2500'' then if v_payment=''upfront'' then v_setup := 2500; v_monthly := 0; else v_setup := 1200; v_monthly := 120; end if;
+    when ''m3000'' then if v_payment=''upfront'' then v_setup := 3000; v_monthly := 0; else v_setup := 1300; v_monthly := 130; end if;
+    else if v_payment=''upfront'' then v_setup := 3500; v_monthly := 0; else v_setup := 1500; v_monthly := 150; end if;
+  end case;');
+  if position('case v_package when ''m1500'' then v_setup := 800;v_monthly := 75 when ''m2500'' then v_setup := 1200;v_monthly := 120 when ''m3000'' then v_setup := 1300;v_monthly := 130 else v_setup := 1500;v_monthly := 150 end case;' in f)>0 then raise exception 'Could not correct payment-option pricing.'; end if;
   if position('v_monthly := 99' in f)>0 then raise exception 'Could not update staff lead Track & Trace rate.'; end if;
   f := replace(f,
     'insert into public.customers(full_name,phone,email,town,address)',
