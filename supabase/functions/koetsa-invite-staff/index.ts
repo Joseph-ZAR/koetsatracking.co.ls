@@ -26,8 +26,10 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") return respond({ error: "Method not allowed." }, 405);
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
-  const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
-  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  const publishableKeys = JSON.parse(Deno.env.get("SUPABASE_PUBLISHABLE_KEYS") || "{}");
+  const secretKeys = JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS") || "{}");
+  const anonKey = publishableKeys.default;
+  const serviceKey = secretKeys.default;
   if (!supabaseUrl || !anonKey || !serviceKey) {
     return respond({ error: "Staff invitation service is not configured." }, 500);
   }
