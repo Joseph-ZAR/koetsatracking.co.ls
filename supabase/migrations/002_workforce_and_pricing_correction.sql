@@ -67,7 +67,7 @@ declare caller_role public.staff_role;
 declare target_role public.staff_role;
 begin
   select role into caller_role from public.profiles where id=auth.uid() and is_active=true;
-  if caller_role not in ('super_admin','general_manager') then
+  if caller_role is null or caller_role not in ('super_admin','general_manager') then
     raise exception 'Super Admin or General Manager permission required.';
   end if;
   if p_role not in ('super_admin','general_manager','sales_manager','sales_consultant','office_administrator','technical_manager','installer','finance_officer') then
@@ -99,7 +99,7 @@ declare caller_role public.staff_role;
 declare target_role public.staff_role;
 begin
   select role into caller_role from public.profiles where id=auth.uid() and is_active=true;
-  if caller_role not in ('super_admin','general_manager') then
+  if caller_role is null or caller_role not in ('super_admin','general_manager') then
     raise exception 'Super Admin or General Manager permission required.';
   end if;
   select role into target_role from public.profiles where id=p_user_id;
