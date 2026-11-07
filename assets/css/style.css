@@ -1077,3 +1077,18 @@ img {
 @media(max-width:1100px){.pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.calculator-layout{grid-template-columns:1fr}.application-form{padding:20px}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.pricing-card{padding:22px 18px}}
 @media(max-width:480px){.pricing-grid{grid-template-columns:1fr}.package-summary{min-height:0}.cost-line{font-size:12px}}
+
+
+/* KOETSA OPERATIONS CENTRE AND SOS RESPONSE */
+.operations-feature,.response-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;margin:30px 0}
+.operations-feature img,.response-image img{display:block;width:100%;height:100%;max-height:440px;object-fit:cover;border-radius:10px;border:2px solid var(--red);box-shadow:0 15px 35px rgba(0,0,0,.14)}
+.operations-copy,.response-copy,.arrears-policy{background:#fff;border:1px solid var(--line);border-radius:10px;padding:28px;box-shadow:0 12px 32px rgba(15,23,42,.05)}
+.operations-copy h3,.response-copy h3,.arrears-policy h3{font-size:25px;line-height:1.2;margin:8px 0 12px;color:var(--ink)}
+.response-steps{padding-left:22px;display:grid;gap:14px}
+.response-steps li{padding-left:5px;color:var(--red-dark)}
+.response-steps li strong,.response-steps li span{display:block;color:var(--ink)}
+.response-steps li span{font-size:14px;color:#596579}
+.response-included{padding:14px;background:#fff0f0;border-left:4px solid var(--red);font-weight:800;color:#7e1820}
+.image-caption{font-size:11px;color:var(--muted);line-height:1.5}
+.arrears-policy{max-width:900px;margin:auto;border-left:4px solid var(--red)}
+@media(max-width:760px){.operations-feature,.response-grid{grid-template-columns:1fr}.operations-copy,.response-copy,.arrears-policy{padding:21px}}
