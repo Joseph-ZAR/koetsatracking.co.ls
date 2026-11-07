@@ -1031,3 +1031,49 @@ img {
     height: 280px;
   }
 }
+
+
+/* PACKAGES, PRICING AND APPLICATION */
+.pricing-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;align-items:stretch}
+.pricing-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:10px;padding:25px 22px;box-shadow:0 12px 32px rgba(15,23,42,.06);display:flex;flex-direction:column}
+.pricing-card.featured{border:2px solid var(--red);box-shadow:0 16px 40px rgba(241,38,45,.12)}
+.popular-label{position:absolute;right:14px;top:14px;background:#fff0f0;color:var(--red-dark);font-size:9px;font-weight:900;letter-spacing:.1em;padding:5px 8px;border-radius:20px}
+.package-kicker{font-size:11px!important;font-weight:900;letter-spacing:.14em;color:var(--red)!important;margin:0 0 7px!important}
+.pricing-card h2{font-size:23px;margin:0 0 8px}
+.package-summary{font-size:13px;min-height:62px}
+.package-price{display:flex;align-items:baseline;gap:6px;margin-top:8px}
+.package-price strong{font-size:38px;letter-spacing:-.04em;color:var(--ink)}
+.package-price span{font-size:12px;color:var(--muted)}
+.setup-fee{font-size:12px;font-weight:800;color:var(--red-dark)!important;margin:0 0 16px}
+.included-label{font-size:11px;font-weight:800;color:var(--ink)!important;margin:4px 0}
+.pricing-card ul{padding-left:18px;margin:8px 0 22px;flex:1}
+.pricing-card li{font-size:12px;line-height:1.55;margin:7px 0;color:#465267}
+.pricing-card .btn{width:100%;margin-top:auto}
+.calculator-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:22px;max-width:1000px;margin:auto}
+.calculator-controls,.calculator-result{background:#fff;border:1px solid var(--line);border-radius:10px;padding:30px;box-shadow:0 12px 32px rgba(15,23,42,.05)}
+.calculator-controls label,.application-form label{display:block;font-size:12px;font-weight:850;color:#273247;margin:0 0 7px}
+.calculator-controls select,.application-form input,.application-form select,.application-form textarea{width:100%;font:inherit;font-size:14px;padding:12px 13px;border:1px solid #cfd5df;border-radius:6px;background:#fff;color:var(--ink);margin:0 0 18px}
+.calculator-controls select:focus,.application-form input:focus,.application-form select:focus,.application-form textarea:focus{outline:2px solid rgba(241,38,45,.25);border-color:var(--red)}
+.term-note{display:grid;gap:8px;padding:15px;background:#f7f8fb;border-left:3px solid var(--red);font-size:12px;color:#596579;margin-top:5px}
+.term-note strong{color:var(--ink)}
+.calculator-result{background:linear-gradient(145deg,#111a29,#090d15);color:#fff;border-color:#293346}
+.calculator-result h3{font-size:24px;margin:0 0 22px;color:#fff}
+.calculator-result .eyebrow{color:var(--red-light)}
+.cost-line{display:flex;justify-content:space-between;gap:15px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:13px;color:#cbd3df}
+.cost-line strong{color:#fff;text-align:right;white-space:nowrap}
+.cost-line.total{margin-top:8px;border-bottom:0;align-items:center}
+.cost-line.total span{font-weight:800;color:#fff}
+.cost-line.total strong{font-size:30px;color:#ff777b}
+.calculator-result>p:not(.eyebrow){font-size:12px;color:#cbd3df;margin:4px 0 20px}
+.calculator-result .btn{margin-top:8px}
+.application-form{max-width:950px;margin:auto;background:#fff;border:1px solid var(--line);border-radius:10px;padding:32px;box-shadow:0 12px 32px rgba(15,23,42,.05)}
+.form-section-title{font-size:15px;font-weight:900;color:var(--ink);padding:12px 0;border-bottom:1px solid var(--line);margin:8px 0 18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:20px}
+.form-grid .full{grid-column:1/-1}
+.application-form input[type="checkbox"]{width:auto;margin:2px 10px 0 0;flex:0 0 auto}
+.application-form .consent-line{display:flex;align-items:flex-start;gap:8px;font-weight:600;line-height:1.6;margin:5px 0 20px}
+.application-summary{background:#f7f8fb;border:1px solid var(--line);border-radius:6px;padding:13px 15px;font-size:12px;color:#3c485b;margin:15px 0}
+.form-disclaimer{font-size:11px!important;color:#687386!important;margin:14px 0 0}
+@media(max-width:1100px){.pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.calculator-layout{grid-template-columns:1fr}.application-form{padding:20px}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.pricing-card{padding:22px 18px}}
+@media(max-width:480px){.pricing-grid{grid-template-columns:1fr}.package-summary{min-height:0}.cost-line{font-size:12px}}
