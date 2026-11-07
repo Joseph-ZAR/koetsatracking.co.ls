@@ -3,10 +3,10 @@ const toggle=document.querySelector('.menu-toggle');const nav=document.querySele
 // Koetsa package calculator and customer enquiry form
 (() => {
   const packages = {
-    m1500: {name:"M1500 — Track & Trace", setup:800, monthly:99},
-    m2500: {name:"M2500 — Security & Control", setup:1200, monthly:120},
-    m3000: {name:"M3000 — Fleet & Driver Intelligence", setup:1300, monthly:130},
-    m3500: {name:"M3500 — Premium Recovery & Response", setup:1500, monthly:150}
+    m1500: {name:"M1500 — Track & Trace", packagePrice:1500, setup:800, monthly:75},
+    m2500: {name:"M2500 — Security & Control", packagePrice:2500, setup:1200, monthly:120},
+    m3000: {name:"M3000 — Fleet & Driver Intelligence", packagePrice:3000, setup:1300, monthly:130},
+    m3500: {name:"M3500 — Premium Recovery & Response", packagePrice:3500, setup:1500, monthly:150}
   };
   const money = n => "M" + Number(n).toLocaleString("en-US");
   const calcPackage = document.getElementById("calc-package");
@@ -18,16 +18,16 @@ const toggle=document.querySelector('.menu-toggle');const nav=document.querySele
   function updateCalculator() {
     if (!calcPackage || !paymentPlan) return;
     const p = packages[calcPackage.value];
-    const full = p.setup + p.monthly * 24;
     const upfront = paymentPlan.value === "upfront";
+    const monthlyTotal = p.setup + p.monthly * 24;
     document.getElementById("result-package").textContent = p.name;
-    document.getElementById("result-setup").textContent = money(p.setup);
-    document.getElementById("result-monthly").textContent = money(p.monthly) + " × 24";
-    document.getElementById("result-total").textContent = money(full);
-    document.getElementById("total-label").textContent = upfront ? "Amount payable upfront" : "Total over 24 months";
+    document.getElementById("result-setup").textContent = upfront ? "M0 — no extra fees" : money(p.setup);
+    document.getElementById("result-monthly").textContent = upfront ? "None" : money(p.monthly) + " × 24";
+    document.getElementById("result-total").textContent = money(upfront ? p.packagePrice : monthlyTotal);
+    document.getElementById("total-label").textContent = upfront ? "One-time package price" : "Total over 24 months";
     document.getElementById("payment-explanation").textContent = upfront
-      ? "Pay " + money(p.setup) + " installation + administration and all 24 monthly subscriptions together."
-      : "Pay " + money(p.setup) + " once-off, followed by 24 monthly payments of " + money(p.monthly) + ".";
+      ? "Pay " + money(p.packagePrice) + " once. No additional installation/admin fee or monthly subscription. This option excludes Koetsa office monitoring and coordinated SOS emergency response."
+      : "Pay " + money(p.setup) + " once, followed by 24 monthly payments of " + money(p.monthly) + ". This is an ongoing service subscription with SOS response coordination while your account is active.";
     if (appPackage) appPackage.value = calcPackage.value;
     if (appPayment) appPayment.value = paymentPlan.value;
     updateApplicationSummary();
@@ -35,10 +35,10 @@ const toggle=document.querySelector('.menu-toggle');const nav=document.querySele
   function updateApplicationSummary() {
     if (!summary || !appPackage || !appPayment) return;
     const p = packages[appPackage.value];
-    const plan = appPayment.value === "upfront" ? "Full 24-month upfront payment" : "Monthly subscription";
-    summary.textContent = "Selected: " + p.name + " · " + plan + " · 24-month contract · " +
-      (appPayment.value === "upfront" ? money(p.setup + p.monthly*24) + " payable upfront." :
-      money(p.setup) + " once-off + " + money(p.monthly) + " per month.");
+    const upfront = appPayment.value === "upfront";
+    summary.textContent = "Selected: " + p.name + " · " +
+      (upfront ? "Package price paid once: " + money(p.packagePrice) + ". No monthly service or Koetsa-coordinated SOS response." :
+      money(p.setup) + " once-off + " + money(p.monthly) + "/month for 24 months (" + money(p.setup + p.monthly*24) + " total). Active monthly subscription includes SOS response coordination.");
   }
   if (calcPackage) calcPackage.addEventListener("change", updateCalculator);
   if (paymentPlan) paymentPlan.addEventListener("change", updateCalculator);
@@ -59,7 +59,7 @@ const toggle=document.querySelector('.menu-toggle');const nav=document.querySele
     const data = new FormData(form);
     const p = packages[data.get("package")];
     const isUpfront = data.get("payment") === "upfront";
-    const total = p.setup + p.monthly * 24;
+    const total = isUpfront ? p.packagePrice : p.setup + p.monthly * 24;
     const payload = {
       name:data.get("name"), phone:data.get("phone"), email:data.get("email"),
       town:data.get("address"), address:data.get("address"), package:data.get("package"),
@@ -94,9 +94,11 @@ const toggle=document.querySelector('.menu-toggle');const nav=document.querySele
       "Email: " + (data.get("email") || "Not supplied"),
       "Town / address: " + (data.get("address") || "Not supplied"), "",
       "PACKAGE & PAYMENT", "Package: " + p.name,
-      "Payment option: " + (isUpfront ? "Full 24-month amount upfront" : "Monthly subscription for 24 months"),
-      "Once-off installation + administration: " + money(p.setup),
-      "Monthly subscription: " + money(p.monthly), "24-month total: " + money(total),
+      "Payment option: " + (isUpfront ? "Full package price upfront — no extra fees" : "Monthly protection subscription for 24 months"),
+      "Once-off installation + administration: " + (isUpfront ? "M0 — no extra fee" : money(p.setup)),
+      "Monthly subscription: " + (isUpfront ? "None" : money(p.monthly)),
+      (isUpfront ? "Package price paid once: " : "Total over 24 months: ") + money(total),
+      "Service distinction: " + (isUpfront ? "No Koetsa office monitoring or coordinated SOS emergency response." : "Ongoing service and SOS emergency-response coordination while the account is active."),
       "Contract term: 24 months", "", "VEHICLE / INSTALLATION",
       "Number of vehicles: " + data.get("vehicleCount"),
       "Vehicle make, model and registration: " + data.get("vehicle"),

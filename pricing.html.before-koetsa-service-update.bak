@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Compare Koetsa Tracking Systems vehicle tracking packages, installation fees and 24-month subscription options in Lesotho.">
+<title>Packages & Pricing | Koetsa Tracking Systems</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="site-header"><a class="brand" href="index.html"><span class="brand-symbol">K</span><span><strong>KOETSA</strong><small>TRACKING SYSTEMS</small></span></a>
+<button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+<nav class="main-nav"><a href="index.html">Home</a><a href="about.html">About Us</a><a href="vision-values.html">Vision &amp; Values</a><a href="mission.html">Our Mission</a><a href="services.html">Services</a><a class="active" href="pricing.html">Packages &amp; Pricing</a><a href="team.html">Our Team</a><a href="why-koetsa.html">Why Koetsa</a><a href="contact.html">Contact</a></nav></header>
+<main>
+<section class="page-hero"><p class="eyebrow">CHOOSE YOUR PROTECTION</p><h1>Tracking packages &amp; pricing</h1><p>Clear once-off installation and administration fees, with a fixed monthly subscription over a 24-month contract.</p><div class="actions"><a class="btn primary" href="#package-calculator">Calculate your package</a><a class="btn outline" href="#apply">Apply now</a></div></section>
+
+<section class="section">
+  <div class="section-heading"><p class="eyebrow">FOUR LEVELS OF PROTECTION</p><h2>Find the package that fits your needs.</h2><p>Every package includes the shared Koetsa service benefits below, plus the features listed for that tier.</p></div>
+  <div class="pricing-grid">
+    <article class="pricing-card">
+      <p class="package-kicker">M1500 PACKAGE</p><h2>Track &amp; Trace</h2><p class="package-summary">Essential visibility and everyday vehicle monitoring.</p>
+      <div class="package-price"><strong>M99</strong><span>/ month</span></div><p class="setup-fee">M800 once-off installation + administration</p>
+      <ul><li>Live map, speed and direction</li><li>Historical route playback — up to 30 days</li><li>Circular and rectangular geofence alerts</li><li>Over-speed alerts</li><li>Ignition (ACC) status detection</li><li>App, web and SMS access</li></ul>
+      <button class="btn outline package-select" type="button" data-package="m1500">Choose M1500</button>
+    </article>
+    <article class="pricing-card">
+      <p class="package-kicker">M2500 PACKAGE</p><h2>Security &amp; Control</h2><p class="package-summary">Added security tools and remote vehicle controls.</p>
+      <div class="package-price"><strong>M120</strong><span>/ month</span></div><p class="setup-fee">M1,200 once-off installation + administration</p>
+      <p class="included-label">Everything in Track &amp; Trace, plus:</p>
+      <ul><li>Remote listen-in, where lawful and supported</li><li>SOS panic button</li><li>Remote immobilisation via compatible relay</li><li>SMS lock/unlock commands, where supported</li><li>Tamper and unplug alerts</li><li>Vibration and movement alerts</li></ul>
+      <button class="btn outline package-select" type="button" data-package="m2500">Choose M2500</button>
+    </article>
+    <article class="pricing-card featured">
+      <span class="popular-label">FLEET CHOICE</span><p class="package-kicker">M3000 PACKAGE</p><h2>Fleet &amp; Driver Intelligence</h2><p class="package-summary">More insight into vehicle use and driver behaviour.</p>
+      <div class="package-price"><strong>M130</strong><span>/ month</span></div><p class="setup-fee">M1,300 once-off installation + administration</p>
+      <p class="included-label">Everything in Security &amp; Control, plus:</p>
+      <ul><li>Driving behaviour analysis</li><li>Harsh acceleration, braking and cornering events</li><li>Collision / crash detection</li><li>Towing detection</li><li>Excessive idling detection</li><li>Virtual odometer and mileage reports</li><li>Multi-vehicle dashboard</li></ul>
+      <button class="btn primary package-select" type="button" data-package="m3000">Choose M3000</button>
+    </article>
+    <article class="pricing-card">
+      <p class="package-kicker">M3500 PACKAGE</p><h2>Premium Recovery &amp; Response</h2><p class="package-summary">The highest level of monitoring and recovery coordination.</p>
+      <div class="package-price"><strong>M150</strong><span>/ month</span></div><p class="setup-fee">M1,500 once-off installation + administration</p>
+      <p class="included-label">Everything in Fleet &amp; Driver Intelligence, plus:</p>
+      <ul><li>SADC cross-border recovery coordination</li><li>Priority 24/7 monitoring-centre escalation</li><li>Law-enforcement escalation pathways, subject to local procedures</li><li>Remote firmware updates (FOTA), on supported devices</li><li>Extended data retention — 90+ days</li></ul>
+      <button class="btn outline package-select" type="button" data-package="m3500">Choose M3500</button>
+    </article>
+  </div>
+  <p class="notice">Feature availability may depend on the installed device, vehicle compatibility, network coverage, partner arrangements and applicable law. Remote controls, listen-in and emergency escalation are only provided where lawful, technically supported and covered by the relevant service arrangements.</p>
+</section>
+
+<section class="section soft">
+  <div class="section-heading"><p class="eyebrow">INCLUDED ACROSS ALL FOUR PACKAGES</p><h2>Shared Koetsa service benefits</h2></div>
+  <div class="card-grid two">
+    <article class="feature-card"><div class="icon">◷</div><h3>24-hour live tracking</h3><p>Access live vehicle location and monitoring through the supported platform.</p></article>
+    <article class="feature-card"><div class="icon">↗</div><h3>Cross-border tracking</h3><p>Tracking while travelling across supported borders, subject to partner network coverage.</p></article>
+    <article class="feature-card"><div class="icon">▤</div><h3>Travel letters</h3><p>Cross-border travel letters when required and arranged with Koetsa.</p></article>
+    <article class="feature-card"><div class="icon">⌖</div><h3>Geofence monitoring</h3><p>Customer calls when a vehicle leaves a designated geofenced area, according to the agreed alert setup.</p></article>
+    <article class="feature-card"><div class="icon">⟳</div><h3>Remote software updates</h3><p>Remote software updates twice a year, where supported by the device and network.</p></article>
+    <article class="feature-card"><div class="icon">▣</div><h3>App and web access</h3><p>Use the supported customer platform to view vehicle information and package features.</p></article>
+  </div>
+</section>
+
+<section class="section" id="package-calculator">
+  <div class="section-heading"><p class="eyebrow">YOUR 24-MONTH COST</p><h2>Choose how you want to pay.</h2><p>Both payment options provide the same package features and service benefits. There is no upfront-payment discount in this pricing schedule.</p></div>
+  <div class="calculator-layout">
+    <div class="calculator-controls">
+      <label for="calc-package">Select package</label>
+      <select id="calc-package">
+        <option value="m1500">M1500 — Track &amp; Trace</option>
+        <option value="m2500">M2500 — Security &amp; Control</option>
+        <option value="m3000">M3000 — Fleet &amp; Driver Intelligence</option>
+        <option value="m3500">M3500 — Premium Recovery &amp; Response</option>
+      </select>
+      <label for="payment-plan">Payment option</label>
+      <select id="payment-plan"><option value="monthly">Monthly subscription for 24 months</option><option value="upfront">Pay the full 24-month amount upfront</option></select>
+      <div class="term-note"><strong>Contract term: 24 months</strong><span>Monthly option: pay the once-off installation + administration fee, then the monthly subscription for 24 months.</span><span>Upfront option: pay the once-off fee and all 24 monthly subscriptions together.</span></div>
+    </div>
+    <div class="calculator-result" aria-live="polite">
+      <p class="eyebrow">YOUR COST SUMMARY</p><h3 id="result-package">M1500 — Track &amp; Trace</h3>
+      <div class="cost-line"><span>Installation + administration (once-off)</span><strong id="result-setup">M800</strong></div>
+      <div class="cost-line"><span>Monthly subscription</span><strong id="result-monthly">M99 × 24</strong></div>
+      <div class="cost-line total"><span id="total-label">Total over 24 months</span><strong id="result-total">M3,176</strong></div>
+      <p id="payment-explanation">Pay M800 once-off, followed by 24 monthly payments of M99.</p>
+      <a class="btn primary" href="#apply" id="calculator-apply">Continue to application</a>
+    </div>
+  </div>
+</section>
+
+<section class="section soft" id="apply">
+  <div class="section-heading"><p class="eyebrow">GET STARTED</p><h2>Customer application / enquiry</h2><p>Complete the details below. Your application summary will be prepared for you to send to Koetsa via WhatsApp.</p></div>
+  <form id="application-form" class="application-form"><input type="text" name="website" tabindex="-1" autocomplete="off" hidden>
+    <div class="form-section-title">Your details</div>
+    <div class="form-grid">
+      <div><label for="customer-name">Full name *</label><input id="customer-name" name="name" required autocomplete="name"></div>
+      <div><label for="customer-phone">Phone / WhatsApp *</label><input id="customer-phone" name="phone" type="tel" required autocomplete="tel"></div>
+      <div><label for="customer-email">Email address</label><input id="customer-email" name="email" type="email" autocomplete="email"></div>
+      <div><label for="customer-address">Town / address</label><input id="customer-address" name="address" autocomplete="street-address"></div>
+    </div>
+    <div class="form-section-title">Package and vehicle</div>
+    <div class="form-grid">
+      <div><label for="application-package">Package *</label><select id="application-package" name="package" required><option value="m1500">M1500 — Track &amp; Trace</option><option value="m2500">M2500 — Security &amp; Control</option><option value="m3000">M3000 — Fleet &amp; Driver Intelligence</option><option value="m3500">M3500 — Premium Recovery &amp; Response</option></select></div>
+      <div><label for="application-payment">Payment option *</label><select id="application-payment" name="payment" required><option value="monthly">Monthly subscription — 24 months</option><option value="upfront">Full 24-month amount upfront</option></select></div>
+      <div><label for="vehicle-count">Number of vehicles *</label><input id="vehicle-count" name="vehicleCount" type="number" min="1" max="100" value="1" required></div>
+      <div><label for="vehicle-details">Vehicle make, model and registration *</label><input id="vehicle-details" name="vehicle" required placeholder="e.g. Toyota Corolla — A100 ABC"></div>
+      <div><label for="vehicle-vin">VIN / chassis number (optional)</label><input id="vehicle-vin" name="vin"></div>
+      <div><label for="install-location">Preferred installation location</label><input id="install-location" name="location" placeholder="Town / area"></div>
+      <div><label for="install-date">Preferred installation date</label><input id="install-date" name="date" type="date"></div>
+      <div class="full"><label for="application-notes">Additional vehicles or notes</label><textarea id="application-notes" name="notes" rows="3" placeholder="For multiple vehicles, list the make, model and registration of each vehicle here."></textarea></div>
+    </div>
+    <label class="consent-line"><input id="contract-consent" type="checkbox" required><span>I understand that the selected package is subject to a 24-month contract, and I agree that Koetsa may contact me about this application. Final activation is subject to confirmation of service terms, vehicle compatibility and installation arrangements. *</span></label>
+    <div class="application-summary" id="application-summary" aria-live="polite">Selected: M1500 — Track &amp; Trace · Monthly option · 24-month term.</div>
+    <button class="btn primary" type="submit">Prepare application on WhatsApp</button>
+    <p id="application-submit-status" class="form-disclaimer" aria-live="polite">When the secure Koetsa portal is configured, applications will be saved to the customer register before the WhatsApp hand-off. Until then, this form sends an enquiry by WhatsApp only.</p>
+  </form>
+</section>
+</main>
+<footer class="site-footer"><div><a class="brand footer-brand" href="index.html"><span class="brand-symbol">K</span><span><strong>KOETSA</strong><small>TRACKING SYSTEMS</small></span></a><p>Securing Your Journey, Protecting Your Future.</p></div><div><b>Explore</b><a href="services.html">Our Services</a><a href="pricing.html">Packages &amp; Pricing</a><a href="family-safety.html">Family Safety</a><a href="schools.html">Schools &amp; Institutions</a></div><div><b>Contact</b><a href="tel:+26653430023">+266 5343 0023</a><a href="mailto:info@koetsatracking.co.ls">info@koetsatracking.co.ls</a><span>Upper Thamae, Maseru, Lesotho</span></div><div class="copyright"><a href="portal/" style="color:inherit;margin-right:14px">Staff Portal</a>© <span id="year"></span> Koetsa Tracking Systems (Pty) Ltd. All rights reserved.</div></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/public-config.js"></script><script src="assets/js/main.js"></script>
+</body></html>
