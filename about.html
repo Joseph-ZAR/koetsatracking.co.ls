@@ -1,32 +1,160 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Koetsa Tracking Systems (Pty) Ltd — vehicle tracking, fleet management and personal safety tracking in Lesotho.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Discover Koetsa Tracking Systems, a Lesotho-based vehicle tracking and telematics company committed to protecting your vehicles, people and valuable assets.">
+<meta name="theme-color" content="#090d15">
 <title>About Us | Koetsa Tracking Systems</title>
 <link rel="stylesheet" href="assets/css/style.css">
+<style>
+/* ABOUT PAGE ONLY — visual language matched to the modern Koetsa homepage */
+.about-modern{--am-red:#f1262d;--am-red2:#ff6268;--am-ink:#0a0e17;--am-muted:#aeb9c9;overflow:hidden}
+.about-modern .about-hero{position:relative;isolation:isolate;display:grid;grid-template-columns:.9fr 1.1fr;gap:34px;align-items:center;min-height:540px;padding:62px clamp(22px,7vw,104px);color:#fff;background:radial-gradient(circle at 74% 40%,rgba(241,38,45,.15),transparent 32%),linear-gradient(115deg,#080c14 5%,#121b2a 65%,#1b2535)}
+.about-modern .about-hero:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.13;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(90deg,transparent,#000)}
+.about-modern .eyebrow{color:var(--am-red2);font-size:11px;font-weight:900;letter-spacing:.19em;text-transform:uppercase;margin:0 0 14px}
+.about-modern .about-hero h1{font-size:clamp(39px,5vw,66px);line-height:1.02;letter-spacing:-.055em;color:#fff;margin:0 0 18px}
+.about-modern .about-hero h1 span{color:var(--am-red2)}
+.about-modern .hero-lead{font-size:19px;line-height:1.45;font-weight:750;color:#fff;margin:0 0 12px}
+.about-modern .about-hero-copy>p:not(.eyebrow):not(.hero-lead){color:#c7d0dc;font-size:14px;max-width:550px}
+.about-modern .about-hero-photo{position:relative}
+.about-modern .about-hero-photo img{width:100%;display:block;aspect-ratio:1.32/1;object-fit:cover;border:1px solid rgba(255,255,255,.2);border-radius:12px;box-shadow:0 25px 70px rgba(0,0,0,.42),0 0 35px rgba(241,38,45,.12)}
+.about-modern .photo-chip{position:absolute;right:14px;bottom:14px;background:rgba(7,12,21,.9);border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:10px 13px;color:#fff;font-size:11px;font-weight:800}
+.about-modern .about-section{padding:72px clamp(22px,7vw,104px);background:#fff}
+.about-modern .about-section.soft{background:#f5f6f9}
+.about-modern .about-section.dark{background:radial-gradient(circle at 88% 12%,rgba(241,38,45,.13),transparent 30%),linear-gradient(125deg,#090d15,#182233);color:#fff}
+.about-modern .section-heading{max-width:780px;margin:0 auto 35px;text-align:center}
+.about-modern .section-heading h2,.about-modern .about-copy h2{font-size:clamp(28px,3.4vw,42px);line-height:1.13;letter-spacing:-.035em;color:#111722;margin:0 0 13px}
+.about-modern .section-heading p{color:#5b6677;margin:0}
+.about-modern .dark .section-heading h2,.about-modern .dark .about-copy h2{color:#fff}
+.about-modern .dark .section-heading p,.about-modern .dark .about-copy p{color:#c4cedb}
+.about-modern .story-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:35px;align-items:center;max-width:1200px;margin:auto}
+.about-modern .story-grid p{color:#566174;font-size:14px}
+.about-modern .story-photo img{width:100%;height:100%;max-height:390px;object-fit:cover;border-radius:11px;border:1px solid #dce1e9;box-shadow:0 16px 40px rgba(15,23,42,.12)}
+.about-modern .promise-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:1200px;margin:auto}
+.about-modern .promise-card{padding:24px;border:1px solid #e0e5ed;border-radius:9px;background:#fff}
+.about-modern .promise-icon{width:44px;height:44px;display:grid;place-items:center;border-radius:9px;background:#fff0f0;border:1px solid #ffd6d8;color:#d51d28;font-size:21px;margin-bottom:14px}
+.about-modern .promise-card h3{font-size:17px;color:#111722;margin:0 0 8px}
+.about-modern .promise-card p{font-size:13px;color:#5b6677;margin:0}
+.about-modern .founder-panel{max-width:1100px;margin:auto;padding:32px;border:1px solid rgba(241,38,45,.35);border-radius:11px;background:linear-gradient(120deg,#151e2d,#090d15)}
+.about-modern .founder-panel blockquote{font-size:clamp(18px,2vw,24px);line-height:1.5;color:#fff;margin:0 0 20px}
+.about-modern .founder-panel p{color:#c4cedb;font-size:13px;margin:0}
+.about-modern .closing{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:30px;border:1px solid rgba(241,38,45,.4);border-radius:11px;background:linear-gradient(115deg,#141e2d,#090d15)}
+.about-modern .closing h2{font-size:clamp(24px,3vw,35px);color:#fff;line-height:1.12;margin:0 0 8px}
+.about-modern .closing p{font-size:13px;color:#c4cedb;margin:0}
+.about-modern .about-btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:5px;background:linear-gradient(135deg,#ff5a60,#b90e19);border:1px solid #ff7378;color:#fff;text-decoration:none;font-size:13px;font-weight:850;white-space:nowrap}
+@media(max-width:950px){.about-modern .about-hero,.about-modern .story-grid{grid-template-columns:1fr}.about-modern .about-hero{gap:25px}.about-modern .about-hero-photo{max-width:850px}.about-modern .promise-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.about-modern .about-hero{padding-top:48px;padding-bottom:45px}.about-modern .about-section{padding-top:52px;padding-bottom:52px}.about-modern .promise-grid{grid-template-columns:1fr}.about-modern .closing{align-items:flex-start;flex-direction:column}.about-modern .about-hero-photo img{aspect-ratio:1.12/1}}
+</style>
 </head>
 <body>
-<header class="site-header"><a class="brand" href="index.html"><img class="brand-logo" src="assets/koetsa logo.jpg" alt="Koetsa Tracking Systems logo"><span><strong>KOETSA</strong><small>TRACKING SYSTEMS</small></span></a>
+<header class="site-header">
+<a class="brand" href="index.html"><img class="brand-logo" src="assets/koetsa logo.jpg" alt="Koetsa Tracking Systems logo"><span><strong>KOETSA</strong><small>TRACKING SYSTEMS</small></span></a>
 <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-<nav class="main-nav"><a class="" href="index.html">Home</a><a class="active" href="about.html">About Us</a><a class="" href="vision-values.html">Vision & Values</a><a class="" href="mission.html">Our Mission</a><a class="" href="services.html">Services</a><a class="" href="pricing.html">Packages &amp; Pricing</a><a class="" href="team.html">Our Team</a><a class="" href="why-koetsa.html">Why Koetsa</a><a class="" href="contact.html">Contact</a></nav></header>
-<main>
-<section class="page-hero"><p class="eyebrow">GET TO KNOW US</p><h1>About Koetsa</h1><p>Built from a practical challenge into a company focused on protection, reliability and service.</p></section>
-<section class="section split">
-  <div><p class="eyebrow">COMPANY OVERVIEW</p><h2>A Lesotho-based telematics company.</h2><p>Koetsa Tracking Systems (Pty) Ltd is a dynamic telematics company headquartered in Lesotho, specializing in state-of-the-art tracking solutions.</p><p>Our name, “Koetsa”, embodies our promise of security and protection. We aim to deliver peace of mind through tracking technology, real-time monitoring and responsive support.</p></div>
-  <aside class="dark-panel"><span class="panel-mark">KTS</span><h3>Securing your journey</h3><p>Protecting your assets and helping you stay connected to what matters.</p></aside>
+<nav class="main-nav">
+<a href="index.html">Home</a><a class="active" href="about.html">About Us</a><a href="vision-values.html">Vision &amp; Values</a><a href="mission.html">Our Mission</a><a href="services.html">Services</a><a href="pricing.html">Packages &amp; Pricing</a><a href="team.html">Our Team</a><a href="why-koetsa.html">Why Koetsa</a><a href="contact.html">Contact</a>
+</nav>
+</header>
+<main class="about-modern">
+<section class="about-hero">
+ <div class="about-hero-copy">
+  <p class="eyebrow">ABOUT KOETSA TRACKING SYSTEMS</p>
+  <h1>Protecting what matters <span>most.</span></h1>
+  <p class="hero-lead">Your valued assets. Your loved ones. Your peace of mind.</p>
+  <p>We are a proudly Lesotho-based tracking and telematics company using technology, reliable support and a personal understanding of our region to help protect what matters to you.</p>
+  <a class="about-btn" href="services.html">Discover our solutions&nbsp; →</a>
+ </div>
+ <div class="about-hero-photo">
+  <img src="assets/koetsa-family-peace-of-mind.webp" alt="A Black African family enjoying a picnic beside their parked vehicle while the father checks a tracking app on his phone; vehicle keys with a panic button are nearby">
+  <div class="photo-chip">PEACE OF MIND, WHEREVER LIFE TAKES YOU</div>
+ </div>
 </section>
-<section class="section soft">
-  <p class="eyebrow">THE GENESIS OF KOETSA</p><h2>From a personal challenge to an entrepreneurial journey.</h2>
-  <p>The company was born from the entrepreneurial journey of founder Mr. Patrick Rangoajane. While a student at Limkokwing Creative University of Technology, he identified a gap in the local market for vehicle owners’ tracking requirements. He developed that opportunity into a sustainable business after graduation. His “go-getter” attitude is now embedded in Koetsa’s culture.</p>
+
+<section class="about-section">
+ <div class="story-grid">
+  <div class="about-copy">
+   <p class="eyebrow">WHO WE ARE</p>
+   <h2>Security is more than technology. It is peace of mind.</h2>
+   <p>Koetsa Tracking Systems (Pty) Ltd is a Lesotho-based telematics company headquartered in Upper Thamae, Maseru. We provide tracking solutions designed to help individuals, families and organisations stay informed about their vehicles, people and valuable assets.</p>
+   <p>Our work brings together GPS tracking, fleet visibility, smart alerts and responsive customer support. From everyday journeys to business operations and cross-border travel, we believe that useful information and dependable service can make a meaningful difference.</p>
+   <p>Our name, Koetsa, reflects our commitment to security and protection. We aim to build lasting relationships through reliability, integrity and a client-centred approach.</p>
+  </div>
+  <div class="story-photo">
+   <img src="assets/koetsa-operations-centre.jpg" alt="Koetsa operations centre team monitoring vehicle tracking information" loading="lazy">
+  </div>
+ </div>
 </section>
-<section class="section">
-  <p class="eyebrow">A WORD FROM THE CEO</p><h2>Founder’s message</h2>
-  <blockquote>“What began as a pragmatic solution to a personal challenge has blossomed into a company with a profound mission: to safeguard what matters most to people — their vehicles, their assets, and most importantly, their families.”</blockquote>
-  <p>Koetsa’s ambition is to become Lesotho’s undisputed leader in premium tracking systems by setting a high standard of excellence, reliability and trust. Our strategic initiatives and partnerships are intended to extend protection beyond Lesotho’s borders.</p>
-  <p class="signature"><strong>Mr. Patrick Rangoajane</strong><br>Founder &amp; Chief Executive Officer<br>Koetsa Tracking Systems (Pty) Ltd</p>
+
+<section class="about-section soft">
+ <div class="story-grid">
+  <div class="about-copy">
+   <p class="eyebrow">OUR PROMISE TO YOU</p>
+   <h2>Confidence to enjoy the moments that matter.</h2>
+   <p>At Koetsa Tracking Systems, we understand that a vehicle is more than a means of transport. It may be how you get your children to school, earn a living, serve your customers or travel to the people you love. The assets you build and manage represent hard work, responsibility and important plans for the future. That is why our commitment goes beyond fitting a tracking device.</p>
+   <p>We bring together practical GPS technology, useful alerts and customer-focused support to help you stay informed about the things entrusted to your care. Whether you are enjoying a family afternoon, managing vehicles across your business or travelling between Lesotho and South Africa, our goal is to give you greater visibility and confidence. When configured for your selected service, features such as geofence notifications, SOS alerts and fleet reporting can help you make timely, informed decisions.</p>
+   <p>We believe protection should feel dependable, understandable and accessible. We listen first, recommend solutions that fit your needs and remain committed to service built on integrity and trust. With Koetsa, you are choosing a local partner focused on helping protect your valued assets and giving you more peace of mind — wherever your journey takes you.</p>
+  </div>
+  <div class="story-photo">
+   <img src="assets/koetsa-family-peace-of-mind.webp" alt="Family enjoying time together beside their vehicle, with a tracking phone and panic-button key remote nearby" loading="lazy">
+  </div>
+ </div>
+</section>
+
+<section class="about-section soft">
+ <div class="section-heading">
+  <p class="eyebrow">OUR COMMITMENT</p>
+  <h2>Protection that lets you focus on living.</h2>
+  <p>Whether you are spending time with family, managing a fleet or moving valuable assets, Koetsa works to keep you connected and informed.</p>
+ </div>
+ <div class="promise-grid">
+  <article class="promise-card"><div class="promise-icon">⌖</div><h3>Know where your vehicle is</h3><p>Tracking visibility helps you view location, speed and direction through the available platform.</p></article>
+  <article class="promise-card"><div class="promise-icon">◉</div><h3>Be alerted to important events</h3><p>Geofence, movement and other configured alerts help you stay aware of activity that matters.</p></article>
+  <article class="promise-card"><div class="promise-icon">⌁</div><h3>Support when it matters</h3><p>Agreed monitoring and response support can help you take informed action when an alert is raised.</p></article>
+  <article class="promise-card"><div class="promise-icon">♡</div><h3>Look after the people you love</h3><p>Personal safety devices and SOS options can help families stay connected, subject to the selected solution.</p></article>
+  <article class="promise-card"><div class="promise-icon">▦</div><h3>Manage your business with clarity</h3><p>Fleet tools can support vehicle oversight, driver-behaviour insights and more informed operations.</p></article>
+  <article class="promise-card"><div class="promise-icon">⇄</div><h3>Stay connected across borders</h3><p>Regional partner-network support can extend tracking beyond Lesotho, subject to network coverage.</p></article>
+ </div>
+</section>
+
+<section class="about-section dark">
+ <div class="section-heading">
+  <p class="eyebrow">THE GENESIS OF KOETSA</p>
+  <h2>A local idea with a bigger purpose.</h2>
+  <p>Koetsa grew from recognising a practical need among vehicle owners in Lesotho.</p>
+ </div>
+ <div class="story-grid">
+  <div class="about-copy">
+   <p>Founded by Mr. Patrick Rangoajane, Koetsa began during his student years at Limkokwing University of Creative Technology. After identifying a gap in the local market for vehicle-tracking services, he began installing tracking devices for people within his network. What started as a practical opportunity developed into a business with a wider ambition: making dependable tracking and protection solutions more accessible to individuals and organisations in Lesotho.</p>
+   <p>That entrepreneurial beginning continues to shape the company’s approach — understand the real challenge, use technology purposefully, and put the customer at the centre of the solution.</p>
+  </div>
+  <div class="about-copy">
+   <p class="eyebrow">OUR PURPOSE</p>
+   <h2>To protect what people work hard to build.</h2>
+   <p>Vehicles and assets represent time, effort, investment and opportunity. Families represent what matters most. Our purpose is to help customers protect these priorities with practical tracking solutions, clear information and service they can rely on.</p>
+  </div>
+ </div>
+</section>
+
+<section class="about-section">
+ <div class="founder-panel">
+  <p class="eyebrow">A MESSAGE FROM OUR FOUNDER</p>
+  <blockquote>“What began as a simple idea has grown into a commitment to safeguard what matters most — your vehicles, your valuable assets and, above all, the people who depend on you.”</blockquote>
+  <p><strong>Mr. Patrick Rangoajane</strong><br>Founder &amp; Chief Executive Officer<br>Koetsa Tracking Systems (Pty) Ltd</p>
+ </div>
+</section>
+
+<section class="about-section dark">
+ <div class="closing">
+  <div><p class="eyebrow">YOUR SAFETY, OUR PRIORITY</p><h2>Move with confidence. Stay connected to what matters.</h2><p>Talk to our team about a tracking solution for your vehicle, family or business.</p></div>
+  <a class="about-btn" href="contact.html">Speak to Koetsa&nbsp; →</a>
+ </div>
 </section>
 </main>
-<footer class="site-footer"><div><a class="brand footer-brand" href="index.html"><img class="brand-logo" src="assets/koetsa logo.jpg" alt="Koetsa Tracking Systems logo"><span><strong>KOETSA</strong><small>TRACKING SYSTEMS</small></span></a><p>Securing Your Journey, Protecting Your Future.</p></div><div><b>Explore</b><a href="services.html">Our Services</a><a href="family-safety.html">Family Safety</a><a href="schools.html">Schools &amp; Institutions</a></div><div><b>Contact</b><a href="tel:+26653430023">+266 5343 0023</a><a href="mailto:info@koetsatracking.co.ls">info@koetsatracking.co.ls</a><span>Upper Thamae, Maseru, Lesotho</span></div><div class="copyright"><a href="portal/" style="color:inherit;margin-right:14px">Staff Portal</a>© <span id="year"></span> Koetsa Tracking Systems (Pty) Ltd. All rights reserved.</div></footer>
+<footer class="site-footer">
+ <div><a class="brand footer-brand" href="index.html"><img class="brand-logo" src="assets/koetsa logo.jpg" alt="Koetsa Tracking Systems logo"><span><strong>KOETSA</strong><small>TRACKING SYSTEMS</small></span></a><p>Securing Your Journey, Protecting Your Future.</p></div>
+ <div><b>Explore</b><a href="services.html">Our Services</a><a href="family-safety.html">Family Safety</a><a href="schools.html">Schools &amp; Institutions</a><a href="pricing.html">Packages &amp; Pricing</a></div>
+ <div><b>Contact</b><a href="tel:+26653430023">+266 5343 0023</a><a href="mailto:info@koetsatracking.co.ls">info@koetsatracking.co.ls</a><span>Upper Thamae, Maseru, Lesotho</span></div>
+ <div class="copyright"><a href="portal/" style="color:inherit;margin-right:14px">Staff Portal</a>© <span id="year"></span> Koetsa Tracking Systems (Pty) Ltd. All rights reserved.</div>
+</footer>
 <script src="assets/js/main.js"></script>
 </body></html>
