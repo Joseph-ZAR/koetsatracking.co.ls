@@ -1094,9 +1094,9 @@ img {
 @media(max-width:760px){.operations-feature,.response-grid{grid-template-columns:1fr}.operations-copy,.response-copy,.arrears-policy{padding:21px}}
 
 
-/* Official Koetsa identity */
-.brand-logo{display:block;width:150px;max-width:32vw;height:auto;object-fit:contain;border-radius:4px}
-.site-header .brand,.site-footer .brand{gap:12px}
-.site-header .brand-logo{width:138px}
-.site-footer .brand-logo{width:128px}
-@media(max-width:700px){.site-header .brand-logo{width:112px}.site-footer .brand-logo{width:112px}}
+/* STAFF PORTAL QUICK ACCESS */
+.staff-portal-nav{display:inline-flex!important;align-items:center;gap:9px;padding:10px 15px!important;border:1px solid rgba(255,255,255,.55)!important;border-radius:999px;background:linear-gradient(135deg,#f1262d,#a80d18);color:#fff!important;box-shadow:0 0 22px rgba(241,38,45,.28);white-space:nowrap}
+.staff-portal-nav:hover{transform:translateY(-2px);box-shadow:0 0 28px rgba(241,38,45,.48)}
+.staff-portal-hero{background:linear-gradient(135deg,#252d3d,#090d15);border:1px solid #ff555b;color:#fff;box-shadow:0 0 22px rgba(241,38,45,.2)}
+.staff-portal-hero:hover{background:#f1262d;color:#fff;transform:translateY(-3px)}
+@media(max-width:760px){.staff-portal-nav{margin:5px 0 10px;justify-content:center}.staff-portal-hero{width:100%}}
