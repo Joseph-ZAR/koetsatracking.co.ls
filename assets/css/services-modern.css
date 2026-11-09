@@ -16,3 +16,19 @@
 .services-page .site-footer{background:#050912}
 @media(max-width:900px){.svc-vehicle-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.svc-trust-strip{grid-template-columns:repeat(3,1fr)}.svc-trust-item:nth-child(3){border-right:0}.svc-capability-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.svc-hero{min-height:560px;padding:46px 22px 210px;background-position:58% center;background-image:linear-gradient(180deg,rgba(4,9,19,.96) 0%,rgba(4,9,19,.83) 42%,rgba(4,9,19,.15) 100%),url('../images/koetsa-services-fleet-hero.webp')}.svc-hero h1{font-size:42px}.svc-trust-strip{grid-template-columns:repeat(2,1fr);padding:12px}.svc-trust-item{justify-content:flex-start;border-right:0;border-bottom:1px solid rgba(255,255,255,.1);font-size:11px}.svc-vehicle-grid,.svc-product-grid,.svc-capability-grid{grid-template-columns:1fr}.svc-vehicle{min-height:0}.svc-product{padding:20px}.svc-feature-list{grid-template-columns:1fr}.svc-cta{grid-template-columns:1fr}.svc-cta img{min-height:220px;max-height:260px}.svc-cta-copy{padding:24px}.svc-section{padding:46px 17px}}
+
+
+/* Image-led, interactive service category cards */
+.svc-vehicle-grid-images .svc-vehicle-card{padding:0;min-height:0;display:flex;flex-direction:column;background:#0d1728;border:1px solid rgba(83,157,255,.42);transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+.svc-vehicle-grid-images .svc-vehicle-card:hover,.svc-vehicle-grid-images .svc-vehicle-card:focus-within{transform:translateY(-5px);border-color:#ff454d;box-shadow:0 16px 36px rgba(0,0,0,.3),0 0 22px rgba(45,137,255,.16)}
+.svc-vehicle-image{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:#17253a}
+.svc-vehicle-content{padding:18px 18px 20px;display:flex;flex-direction:column;align-items:flex-start;flex:1}
+.svc-vehicle-content .svc-icon{font-size:25px}.svc-vehicle-content h3{margin:7px 0 7px}.svc-vehicle-content>p{min-height:42px}
+.svc-category-details{width:100%;margin-top:12px;border-top:1px solid rgba(255,255,255,.14);padding-top:10px}
+.svc-category-details summary{cursor:pointer;list-style:none;color:#ff6268;font-size:13px;font-weight:800;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:5px 0;touch-action:manipulation}
+.svc-category-details summary::-webkit-details-marker{display:none}.svc-category-details summary span{font-size:19px;transition:transform .2s ease}.svc-category-details[open] summary span{transform:rotate(45deg)}
+.svc-category-details>p{font-size:13px;color:#d2dbea;line-height:1.55;margin:9px 0}.svc-category-details small{display:block;color:#9eabc0;font-size:11px;line-height:1.5;margin-bottom:10px}
+.svc-category-link{display:inline-block;color:#fff;background:#d91f2b;border-radius:22px;padding:9px 13px;text-decoration:none;font-size:12px;font-weight:800}.svc-category-link:hover{background:#f13a45}
+.svc-category-details summary:focus-visible,.svc-category-link:focus-visible{outline:3px solid #61b5ff;outline-offset:3px}
+@media(max-width:640px){.svc-vehicle-grid-images{grid-template-columns:1fr}.svc-vehicle-image{aspect-ratio:16/9}.svc-vehicle-content>p{min-height:0}}
+@media(prefers-reduced-motion:reduce){.svc-vehicle-grid-images .svc-vehicle-card,.svc-category-details summary span{transition:none}}
