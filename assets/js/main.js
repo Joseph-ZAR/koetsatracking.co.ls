@@ -1,4 +1,21 @@
-const toggle=document.querySelector('.menu-toggle');const nav=document.querySelector('.main-nav');if(toggle&&nav){toggle.addEventListener('click',()=>{const open=nav.classList.toggle('open');toggle.setAttribute('aria-expanded',String(open));});}const year=document.getElementById('year');if(year)year.textContent=new Date().getFullYear();
+const toggle=document.querySelector('.menu-toggle');
+const nav=document.querySelector('.main-nav');
+if(toggle&&nav){
+  const closeMenu=()=>{nav.classList.remove('open');toggle.setAttribute('aria-expanded','false');};
+  toggle.addEventListener('click',()=>{
+    const open=nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded',String(open));
+    toggle.setAttribute('aria-label',open?'Close navigation':'Open navigation');
+  });
+  nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeMenu));
+  document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu();});
+  document.addEventListener('click',event=>{
+    if(!nav.contains(event.target)&&!toggle.contains(event.target))closeMenu();
+  });
+  window.addEventListener('resize',()=>{if(window.innerWidth>1180)closeMenu();});
+}
+const year=document.getElementById('year');
+if(year)year.textContent=new Date().getFullYear();
 
 // Koetsa package calculator and customer enquiry form
 (() => {
