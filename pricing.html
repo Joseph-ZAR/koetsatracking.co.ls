@@ -101,13 +101,13 @@
 </section>
 
 <section class="section soft" id="apply">
-  <div class="section-heading"><p class="eyebrow">GET STARTED</p><h2>Customer application / enquiry</h2><p>Complete the details below. Your application summary will be prepared for you to send to Koetsa via WhatsApp.</p></div>
+  <div class="section-heading"><p class="eyebrow">GET STARTED</p><h2>Customer application / enquiry</h2><p>Complete the details below. Your application will be securely recorded, sent to Koetsa by email, and prepared for WhatsApp. You will also receive an email acknowledgement.</p></div>
   <form id="application-form" class="application-form"><input type="text" name="website" tabindex="-1" autocomplete="off" hidden>
     <div class="form-section-title">Your details</div>
     <div class="form-grid">
       <div><label for="customer-name">Full name *</label><input id="customer-name" name="name" required autocomplete="name"></div>
       <div><label for="customer-phone">Phone / WhatsApp *</label><input id="customer-phone" name="phone" type="tel" required autocomplete="tel"></div>
-      <div><label for="customer-email">Email address</label><input id="customer-email" name="email" type="email" autocomplete="email"></div>
+      <div><label for="customer-email">Email address</label><input id="customer-email" name="email" type="email" required autocomplete="email"></div>
       <div><label for="customer-address">Town / address</label><input id="customer-address" name="address" autocomplete="street-address"></div>
     </div>
     <div class="form-section-title">Package and vehicle</div>
@@ -123,8 +123,8 @@
     </div>
     <label class="consent-line"><input id="contract-consent" type="checkbox" required><span>I understand that the monthly option is a 24-month service subscription, that emergency-response eligibility requires an active account, and that arrears exceeding two months may result in device deactivation and suspension of emergency protocols. I agree that Koetsa may contact me about this application. Final activation is subject to confirmation of service terms, vehicle compatibility and installation arrangements. *</span></label>
     <div class="application-summary" id="application-summary" aria-live="polite">Selected: M1500 — Track &amp; Trace · Monthly option · 24-month term.</div>
-    <button class="btn primary" type="submit">Prepare application on WhatsApp</button>
-    <p id="application-submit-status" class="form-disclaimer" aria-live="polite">When the secure Koetsa portal is configured, applications will be saved to the customer register before the WhatsApp hand-off. Until then, this form sends an enquiry by WhatsApp only.</p>
+    <button class="btn primary" type="submit">Submit application &amp; continue to WhatsApp</button>
+    <p id="application-submit-status" class="form-disclaimer" aria-live="polite">After successful submission, your application is saved securely, emailed to Koetsa, and prepared for WhatsApp. A confirmation email will be sent to the address you provide.</p>
   </form>
 </section>
 </main>

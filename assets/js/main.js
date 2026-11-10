@@ -1,21 +1,4 @@
-const toggle=document.querySelector('.menu-toggle');
-const nav=document.querySelector('.main-nav');
-if(toggle&&nav){
-  const closeMenu=()=>{nav.classList.remove('open');toggle.setAttribute('aria-expanded','false');};
-  toggle.addEventListener('click',()=>{
-    const open=nav.classList.toggle('open');
-    toggle.setAttribute('aria-expanded',String(open));
-    toggle.setAttribute('aria-label',open?'Close navigation':'Open navigation');
-  });
-  nav.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeMenu));
-  document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu();});
-  document.addEventListener('click',event=>{
-    if(!nav.contains(event.target)&&!toggle.contains(event.target))closeMenu();
-  });
-  window.addEventListener('resize',()=>{if(window.innerWidth>1180)closeMenu();});
-}
-const year=document.getElementById('year');
-if(year)year.textContent=new Date().getFullYear();
+const toggle=document.querySelector('.menu-toggle');const nav=document.querySelector('.main-nav');if(toggle&&nav){toggle.addEventListener('click',()=>{const open=nav.classList.toggle('open');toggle.setAttribute('aria-expanded',String(open));});}const year=document.getElementById('year');if(year)year.textContent=new Date().getFullYear();
 
 // Koetsa package calculator and customer enquiry form
 (() => {
@@ -86,6 +69,7 @@ if(year)year.textContent=new Date().getFullYear();
       website:data.get("website") || ""
     };
     let applicationRef = null;
+    let emailNotificationsSent = false;
     const status = document.getElementById("application-submit-status");
     const submitButton = form.querySelector('button[type="submit"]');
     if (submitButton) submitButton.disabled = true;
@@ -96,8 +80,20 @@ if(year)year.textContent=new Date().getFullYear();
         const {data:result,error} = await client.rpc("submit_koetsa_application", {p_payload:payload});
         if (error) throw error;
         applicationRef = result?.application_ref || null;
-        if (status) status.textContent = "Application saved securely. Reference: " + (applicationRef || "received") + ". Opening WhatsApp…";
+        if (!applicationRef) throw new Error("Application reference was not returned.");
+        try {
+          const { data: emailResult, error: emailError } = await client.functions.invoke("koetsa-application-email", {
+            body: { applicationRef, applicant: payload, packageName: p.name, paymentLabel: isUpfront ? "Full package price upfront" : "Monthly protection subscription — 24 months", setupAmount: isUpfront ? 0 : p.setup, monthlyAmount: isUpfront ? 0 : p.monthly, totalAmount: total }
+          });
+          if (emailError || !emailResult?.success) throw emailError || new Error("Email service did not confirm delivery.");
+          emailNotificationsSent = true;
+          if (status) status.textContent = "Application received successfully. Reference: " + applicationRef + ". A confirmation has been emailed to you and a copy sent to Koetsa. Opening WhatsApp…";
+        } catch (emailErr) {
+          console.error("Koetsa application email notification failed:", emailErr);
+          if (status) status.textContent = "Your application has been saved (Reference: " + applicationRef + ") and WhatsApp is opening. Email confirmation could not be sent automatically; please contact Koetsa if you do not receive a response.";
+        }
       } catch (err) {
+        console.error("Koetsa application save failed:", err);
         if (status) status.textContent = "We could not save your application to the secure system. You can still send the enquiry by WhatsApp; Koetsa will need to register it manually.";
       }
     } else if (status) {
