@@ -1,0 +1,81 @@
+/* Koetsa Our Team page — page-specific styling */
+.team-page { overflow: hidden; }
+.team-hero {
+  min-height: 590px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 76px clamp(22px, 8vw, 120px);
+  color: #fff;
+  background: #090d15 url("../images/koetsa-services-fleet-hero.webp") center 52% / cover no-repeat;
+  isolation: isolate;
+}
+.team-hero-shade {
+  position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(90deg, rgba(5,9,17,.96) 0%, rgba(5,9,17,.86) 43%, rgba(5,9,17,.25) 100%),
+              linear-gradient(0deg, rgba(5,9,17,.72), transparent 55%);
+}
+.team-hero-content { max-width: 760px; position: relative; z-index: 1; }
+.team-hero .eyebrow, .team-cta .eyebrow { color: #ff6268; }
+.team-hero h1 {
+  max-width: 800px; margin: 0 0 22px; color: #fff;
+  font-size: clamp(40px, 5.5vw, 70px); line-height: 1.04; letter-spacing: -.045em;
+}
+.team-hero h1 span { color: #ff6268; }
+.team-hero-content > p:not(.eyebrow) { max-width: 590px; color: #e1e7ef; font-size: clamp(16px, 1.5vw, 19px); line-height: 1.75; }
+.team-hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.team-hero-note { display: flex; align-items: center; gap: 10px; margin-top: 32px; color: #dce4ef; font-size: 12px; letter-spacing: .04em; }
+.team-pulse { width: 9px; height: 9px; border-radius: 50%; background: #ff555d; box-shadow: 0 0 0 6px rgba(255,85,93,.16); }
+.team-hero-caption { position: absolute; right: clamp(22px, 5vw, 72px); bottom: 28px; color: rgba(255,255,255,.78); font-size: 10px; letter-spacing: .2em; font-weight: 800; }
+.team-intro { display: grid; grid-template-columns: .78fr 1.22fr; align-items: center; gap: clamp(28px, 6vw, 80px); }
+.team-intro-heading h2, .team-commitment-copy h2 { color: #101827; font-size: clamp(30px, 3.6vw, 45px); line-height: 1.12; letter-spacing: -.035em; margin: 0 0 16px; }
+.team-intro-heading > p:last-child { color: #5c6879; font-size: 17px; line-height: 1.7; }
+.team-photo-wrap { position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 24px 65px rgba(8,17,31,.17); background: #e9edf2; }
+.team-photo-wrap::after { content: ""; position: absolute; inset: 55% 0 0; background: linear-gradient(0deg, rgba(5,9,17,.75), transparent); pointer-events: none; }
+.team-photo-wrap img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: center 42%; }
+.team-photo-label { position: absolute; z-index: 1; bottom: 22px; left: 24px; display: flex; flex-direction: column; gap: 4px; color: #fff; }
+.team-photo-label strong { font-size: 13px; letter-spacing: .16em; }
+.team-photo-label span { font-size: 13px; color: #e0e6ef; }
+.team-commitment { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: start; gap: clamp(32px, 6vw, 82px); padding-top: 35px; }
+.team-commitment-copy h2 { max-width: 800px; margin-bottom: 25px; }
+.team-commitment-copy > p:not(.eyebrow) { color: #4f5b6c; font-size: 15px; line-height: 1.9; margin: 0 0 17px; }
+.team-signoff { display: flex; flex-direction: column; gap: 5px; margin-top: 28px; padding-left: 18px; border-left: 3px solid #e52c36; }
+.team-signoff strong { color: #111827; font-size: 15px; }
+.team-signoff span { color: #687487; font-size: 13px; }
+.team-promise-card { position: sticky; top: 28px; padding: 30px 26px; border-radius: 14px; color: #fff; background: radial-gradient(circle at 100% 0, rgba(229,44,54,.28), transparent 42%), linear-gradient(145deg,#1b2637,#090d15); border: 1px solid rgba(255,255,255,.09); box-shadow: 0 18px 42px rgba(10,18,31,.16); }
+.team-shield { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 14px; background: rgba(229,44,54,.18); border: 1px solid rgba(255,100,108,.35); color: #ff6970; font-size: 27px; font-weight: 900; margin-bottom: 24px; }
+.team-promise-card .eyebrow { color: #ff6970; }
+.team-promise-card h3 { font-size: 25px; line-height: 1.2; margin: 0 0 12px; color: #fff; }
+.team-promise-card > p:not(.eyebrow) { color: #c5cfdd; font-size: 14px; line-height: 1.7; }
+.team-promise-card a { display: inline-block; margin-top: 18px; color: #ff7379; font-weight: 800; font-size: 13px; }
+.team-pillars { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; padding: 52px clamp(20px, 8vw, 120px); background: #101827; }
+.team-pillar { padding: 18px 22px; border-right: 1px solid rgba(255,255,255,.12); }
+.team-pillar:last-child { border-right: 0; }
+.team-pillar > span { color: #ff6268; font-size: 12px; font-weight: 900; letter-spacing: .12em; }
+.team-pillar h3 { color: #fff; font-size: 19px; margin: 12px 0 8px; }
+.team-pillar p { color: #bdc8d6; font-size: 13px; line-height: 1.7; margin: 0; }
+.team-cta { padding: 76px 22px; text-align: center; color: #fff; background: radial-gradient(circle at 50% 0, rgba(229,44,54,.2), transparent 45%), linear-gradient(130deg,#090d15,#1b2637); border-top: 2px solid #e52c36; }
+.team-cta h2 { margin: 0 0 12px; color: #fff; font-size: clamp(30px,4vw,46px); letter-spacing: -.03em; }
+.team-cta > p:not(.eyebrow) { max-width: 620px; margin: 0 auto; color: #c8d2df; line-height: 1.7; }
+.team-cta .team-hero-actions { justify-content: center; }
+@media (max-width: 900px) {
+  .team-intro { grid-template-columns: 1fr; }
+  .team-intro-heading { max-width: 650px; }
+  .team-commitment { grid-template-columns: 1fr; }
+  .team-promise-card { position: static; max-width: 520px; }
+  .team-pillars { grid-template-columns: repeat(2,1fr); }
+  .team-pillar:nth-child(2) { border-right: 0; }
+}
+@media (max-width: 600px) {
+  .team-hero { min-height: 620px; padding: 62px 22px 78px; background-position: 58% center; }
+  .team-hero-shade { background: linear-gradient(90deg,rgba(5,9,17,.94),rgba(5,9,17,.68)),linear-gradient(0deg,rgba(5,9,17,.65),transparent); }
+  .team-hero h1 { font-size: clamp(38px, 11vw, 52px); }
+  .team-hero-caption { left: 22px; right: 22px; font-size: 9px; }
+  .team-intro, .team-commitment { padding-top: 52px; padding-bottom: 52px; }
+  .team-photo-wrap img { aspect-ratio: 4 / 3; }
+  .team-pillars { grid-template-columns: 1fr; padding: 34px 22px; }
+  .team-pillar { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.12); padding: 18px 6px; }
+  .team-pillar:last-child { border-bottom: 0; }
+  .team-cta { padding: 60px 22px; }
+  .team-hero-actions .btn { width: 100%; }
+}
