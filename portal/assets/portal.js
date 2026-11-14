@@ -71,13 +71,13 @@
   if(error){$('#team-table').textContent='Could not load staff: '+error.message;return;}
   const el=$('#team-table');
   const roleOptions=(selected)=>Object.entries(roleLabels).filter(([k])=>profile.role==='super_admin'||k!=='super_admin').map(([k,v])=>`<option value="${k}" ${selected===k?'selected':''}>${v}</option>`).join('');
-  el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Employee</th><th>Contact</th><th>Department / title</th><th>Role</th><th>Start date</th><th>Account status</th><th>Save</th></tr></thead><tbody>${(data||[]).map(x=>`<tr>
+  el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Employee</th><th>Contact</th><th>Department / title</th><th>Role</th><th>Start date</th><th>Account status</th><th>Save</th>${profile.role==='super_admin'?'<th>Delete</th>':''}</tr></thead><tbody>${(data||[]).map(x=>`<tr>
   <td><input data-name-user="${x.id}" value="${esc(x.full_name||'')}" placeholder="Full name" style="max-width:150px"><br><small>${esc(x.email||'')}</small></td>
   <td><input data-phone-user="${x.id}" value="${esc(x.phone||'')}" placeholder="Phone" style="max-width:130px"></td><td><input data-dept-user="${x.id}" value="${esc(x.department||'')}" placeholder="Department" style="max-width:130px"><br><input data-title-user="${x.id}" value="${esc(x.job_title||'')}" placeholder="Job title" style="max-width:130px"></td>
   <td><select data-role-user="${x.id}">${roleOptions(x.role)}</select></td>
   <td><input type="date" data-start-user="${x.id}" value="${esc(x.employment_start_date||'')}" style="max-width:135px"></td>
   <td><label><input type="checkbox" data-active-user="${x.id}" ${x.is_active?'checked':''}> ${x.is_active?'Active':'Suspended'}</label><br><small>${x.must_change_password?'Must change password':'Password set'}</small></td>
-  <td><button class="secondary" data-save-user="${x.id}">Save</button></td></tr>`).join('')}</tbody></table></div>`;
+  <td><button class="secondary" data-save-user="${x.id}">Save</button></td>${profile.role==='super_admin'?`<td><button class="secondary" data-delete-user="${x.id}" ${x.id===user.id?'disabled title="You cannot delete your own account"':''} style="border-color:#b42318;color:#b42318">Delete</button></td>`:''}</tr>`).join('')}</tbody></table></div>`;
   $('#create-staff-form').onsubmit=async e=>{
    e.preventDefault();const form=e.currentTarget,btn=form.querySelector('button[type=submit]');const values=Object.fromEntries(new FormData(form));btn.disabled=true;btn.textContent='Creating account…';
    try{const {data:{session}}=await db.auth.getSession();if(!session)throw new Error('Your session has expired. Sign in again.');
@@ -88,6 +88,16 @@
     form.reset();msg('Active employee account created. Temporary password is shown above.');
    }catch(err){msg('Employee account creation failed: '+err.message);}finally{btn.disabled=false;btn.textContent='Create active employee account';}
   };
+  if(profile.role==='super_admin') el.querySelectorAll('[data-delete-user]').forEach(btn=>btn.onclick=async()=>{
+   const row=btn.closest('tr'),name=row.querySelector(`[data-name-user="${btn.dataset.deleteUser}"]`)?.value||'this employee',email=row.querySelector('td small')?.textContent||'';
+   if(!confirm(`Permanently delete ${name} (${email})?\n\nTheir portal login will be removed. Existing customer, lead, installation and payment records will be retained, but this employee will be unassigned from those records. This cannot be undone.`))return;
+   btn.disabled=true;btn.textContent='Deleting…';
+   try{const {data:{session}}=await db.auth.getSession();if(!session)throw new Error('Your session has expired. Sign in again.');
+    const response=await fetch(cfg.supabaseUrl+'/functions/v1/koetsa-delete-staff',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':cfg.supabaseAnonKey},body:JSON.stringify({user_id:btn.dataset.deleteUser})});
+    const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||'Employee account could not be deleted.');
+    msg('Employee account permanently deleted. Existing business records have been retained.');navigate('team');
+   }catch(err){msg('Employee deletion failed: '+err.message);btn.disabled=false;btn.textContent='Delete';}
+  });
   el.querySelectorAll('[data-save-user]').forEach(btn=>btn.onclick=async()=>{
    const id=btn.dataset.saveUser,role=el.querySelector(`[data-role-user="${id}"]`).value,is_active=el.querySelector(`[data-active-user="${id}"]`).checked;
    const full_name=el.querySelector(`[data-name-user="${id}"]`).value,phone=el.querySelector(`[data-phone-user="${id}"]`).value,department=el.querySelector(`[data-dept-user="${id}"]`).value,job_title=el.querySelector(`[data-title-user="${id}"]`).value,employment_start_date=el.querySelector(`[data-start-user="${id}"]`).value||null;
