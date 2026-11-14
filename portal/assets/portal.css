@@ -14,3 +14,9 @@
 .staff-badge.active{background:#e3f5eb;color:#20683f}
 .staff-badge.inactive{background:#fde8e9;color:#a51d29}
 @media(max-width:520px){.portal-logo{width:145px}}
+
+.credential-panel{margin:14px 0;padding:16px;border:1px solid #b8d9c5;background:#f0faf3;border-radius:9px}
+.credential-panel h3{margin:0 0 10px;color:#205f39;font-size:15px}
+.credential-panel label{display:block;font-size:11px;font-weight:700;margin:10px 0}
+.credential-panel input{display:block;width:100%;max-width:420px;margin-top:6px;padding:11px;border:1px solid #cbd5df;border-radius:6px;font:inherit;font-size:14px}
+#first-password-view{margin:40px auto}

@@ -1,6 +1,6 @@
-// Supabase Edge Function: koetsa-invite-staff
+// Supabase Edge Function: staff account creation (legacy endpoint name retained to avoid
+// changing the portal URL). No invitation emails or invitation links are sent.
 // Deploy with: supabase functions deploy koetsa-invite-staff
-// Required secret: SUPABASE_SERVICE_ROLE_KEY (never place this in browser files).
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
@@ -8,12 +8,32 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
-
 const allowedRoles = new Set([
   "general_manager", "sales_manager", "sales_consultant",
-  "office_administrator", "technical_manager", "installer", "finance_officer",
-  "super_admin",
+  "office_administrator", "technical_manager", "installer",
+  "finance_officer", "super_admin",
 ]);
+function makeTemporaryPassword() {
+  const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const lower = "abcdefghijkmnopqrstuvwxyz";
+  const digits = "23456789";
+  const symbols = "!@#$%*-_";
+  const all = upper + lower + digits + symbols;
+  const bytes = new Uint8Array(20);
+  crypto.getRandomValues(bytes);
+  const chars = [
+    upper[bytes[0] % upper.length],
+    lower[bytes[1] % lower.length],
+    digits[bytes[2] % digits.length],
+    symbols[bytes[3] % symbols.length],
+    ...Array.from(bytes.slice(4), b => all[b % all.length]),
+  ];
+  for (let i = chars.length - 1; i > 0; i--) {
+    const j = bytes[i % bytes.length] % (i + 1);
+    [chars[i], chars[j]] = [chars[j], chars[i]];
+  }
+  return chars.join("");
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -22,21 +42,26 @@ Deno.serve(async (req) => {
       status,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-
   if (req.method !== "POST") return respond({ error: "Method not allowed." }, 405);
 
+  let publishableKeys: Record<string, string> = {};
+  let secretKeys: Record<string, string> = {};
+  try {
+    publishableKeys = JSON.parse(Deno.env.get("SUPABASE_PUBLISHABLE_KEYS") || "{}");
+    secretKeys = JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS") || "{}");
+  } catch {
+    return respond({ error: "Supabase keys are not configured correctly." }, 500);
+  }
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
-  const publishableKeys = JSON.parse(Deno.env.get("SUPABASE_PUBLISHABLE_KEYS") || "{}");
-  const secretKeys = JSON.parse(Deno.env.get("SUPABASE_SECRET_KEYS") || "{}");
   const anonKey = publishableKeys.default;
   const serviceKey = secretKeys.default;
   if (!supabaseUrl || !anonKey || !serviceKey) {
-    return respond({ error: "Staff invitation service is not configured." }, 500);
+    return respond({ error: "Staff account service is not configured." }, 500);
   }
 
   const authHeader = req.headers.get("Authorization") || "";
   const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
-  if (!token) return respond({ error: "Sign in before inviting an employee." }, 401);
+  if (!token) return respond({ error: "Sign in before creating an employee account." }, 401);
 
   const callerClient = createClient(supabaseUrl, anonKey, {
     global: { headers: { Authorization: `Bearer ${token}` } },
@@ -51,12 +76,11 @@ Deno.serve(async (req) => {
   const { data: caller, error: callerError } = await admin
     .from("profiles").select("role,is_active").eq("id", authData.user.id).single();
   if (callerError || !caller?.is_active || !["super_admin", "general_manager"].includes(caller.role)) {
-    return respond({ error: "Only the Super Admin or General Manager can invite employees." }, 403);
+    return respond({ error: "Only the Super Admin or General Manager can create employee accounts." }, 403);
   }
 
   let body: Record<string, unknown>;
   try { body = await req.json(); } catch { return respond({ error: "Invalid request body." }, 400); }
-
   const fullName = String(body.full_name || "").trim().slice(0, 120);
   const email = String(body.email || "").trim().toLowerCase().slice(0, 160);
   const phone = String(body.phone || "").trim().slice(0, 40);
@@ -64,7 +88,6 @@ Deno.serve(async (req) => {
   const jobTitle = String(body.job_title || "").trim().slice(0, 100);
   const startDate = body.employment_start_date ? String(body.employment_start_date) : null;
   const role = String(body.role || "sales_consultant");
-
   if (fullName.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !department || !jobTitle) {
     return respond({ error: "Enter a valid name, email, department and job title." }, 400);
   }
@@ -76,16 +99,19 @@ Deno.serve(async (req) => {
     return respond({ error: "Employment start date must be a valid date." }, 400);
   }
 
-  const { data: invited, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email, {
-    data: { full_name: fullName },
+  const temporaryPassword = makeTemporaryPassword();
+  const { data: created, error: createError } = await admin.auth.admin.createUser({
+    email,
+    password: temporaryPassword,
+    email_confirm: true,
+    user_metadata: { full_name: fullName },
   });
-  if (inviteError || !invited.user) {
-    return respond({ error: inviteError?.message || "Invitation could not be sent." }, 400);
+  if (createError || !created.user) {
+    return respond({ error: createError?.message || "Employee account could not be created." }, 400);
   }
 
-  // Auth trigger creates the profile with the least-privileged role and inactive status.
   const { error: profileError } = await admin.from("profiles").upsert({
-    id: invited.user.id,
+    id: created.user.id,
     full_name: fullName,
     email,
     phone: phone || null,
@@ -93,22 +119,31 @@ Deno.serve(async (req) => {
     job_title: jobTitle,
     employment_start_date: startDate,
     role,
-    is_active: false,
+    is_active: true,
+    must_change_password: true,
     updated_at: new Date().toISOString(),
   }, { onConflict: "id" });
 
   if (profileError) {
-    // Keep the invited identity inactive; report that the manager should retry profile setup.
-    return respond({ error: "The invitation was created, but the staff profile could not be completed. Contact the Super Admin. " + profileError.message }, 500);
+    await admin.auth.admin.deleteUser(created.user.id);
+    return respond({ error: "The account could not be completed; the incomplete account was removed. " + profileError.message }, 500);
   }
 
   await admin.from("audit_logs").insert({
     actor_id: authData.user.id,
     table_name: "profiles",
-    record_id: invited.user.id,
-    action: "INVITE",
-    changed_fields: ["email", "full_name", "phone", "department", "job_title", "employment_start_date", "role", "is_active"],
+    record_id: created.user.id,
+    action: "CREATE",
+    changed_fields: ["email", "full_name", "phone", "department", "job_title", "employment_start_date", "role", "is_active", "must_change_password"],
   });
 
-  return respond({ success: true, message: "Invitation email sent. The new staff profile is inactive until management activates it." });
+  // This is the only response containing the temporary password. It is never stored or logged.
+  return respond({
+    success: true,
+    email,
+    temporary_password: temporaryPassword,
+    is_active: true,
+    must_change_password: true,
+    message: "Employee account created and activated. The employee must change the temporary password at first sign-in.",
+  });
 });

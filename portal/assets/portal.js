@@ -6,11 +6,15 @@
  const money=n=>'M'+Number(n||0).toLocaleString('en-US');
  function msg(t,where='#app-message'){const el=$(where);if(el)el.textContent=t||'';}
  function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
- function showLogin(){loginView.classList.remove('hidden');appView.classList.add('hidden');}
- function showApp(){loginView.classList.add('hidden');appView.classList.remove('hidden');$('#user-name').textContent=profile?.full_name||user.email;$('#user-role').textContent=roleLabels[profile?.role]||'Staff';$('#user-initials').textContent=(profile?.full_name||user.email).slice(0,1).toUpperCase();document.querySelectorAll('[data-manager="true"]').forEach(b=>b.classList.toggle('hidden',!['super_admin','general_manager'].includes(profile.role)));document.querySelectorAll('[data-audit="true"]').forEach(b=>b.classList.toggle('hidden',!['super_admin','general_manager'].includes(profile.role)));navigate('overview');}
- async function loadProfile(){const {data,error}=await db.from('profiles').select('id,full_name,role,is_active').eq('id',user.id).single();if(error||!data||!data.is_active)throw new Error('Your staff profile is not active. Contact a Koetsa administrator.');profile=data;}
- async function bootSession(){const {data:{session}}=await db.auth.getSession();if(session){user=session.user;try{await loadProfile();showApp()}catch(e){await db.auth.signOut();showLogin();msg(e.message,'#login-message')}}else showLogin();}
- $('#login-form').addEventListener('submit',async e=>{e.preventDefault();if(!ready){msg('Portal setup is incomplete. Configure Supabase in portal/config.js first.','#login-message');return;}const f=new FormData(e.currentTarget);const btn=e.currentTarget.querySelector('button');btn.disabled=true;msg('Signing in…','#login-message');const {data,error}=await db.auth.signInWithPassword({email:f.get('email'),password:f.get('password')});btn.disabled=false;if(error){msg('Sign-in failed. Check your credentials or contact the administrator.','#login-message');return;}user=data.user;try{await loadProfile();showApp()}catch(err){await db.auth.signOut();msg(err.message,'#login-message')}});
+ function showLogin(){loginView.classList.remove('hidden');appView.classList.add('hidden');$('#first-password-view')?.classList.add('hidden');}
+ function showFirstPassword(){loginView.classList.add('hidden');appView.classList.add('hidden');$('#first-password-view').classList.remove('hidden');$('#first-password-name').textContent=profile?.full_name||user?.email||'Staff member';$('#first-password-message').textContent='For security, create your own password before continuing.';}
+ function showApp(){loginView.classList.add('hidden');$('#first-password-view')?.classList.add('hidden');appView.classList.remove('hidden');$('#user-name').textContent=profile?.full_name||user.email;$('#user-role').textContent=roleLabels[profile?.role]||'Staff';$('#user-initials').textContent=(profile?.full_name||user.email).slice(0,1).toUpperCase();document.querySelectorAll('[data-manager="true"]').forEach(b=>b.classList.toggle('hidden',!['super_admin','general_manager'].includes(profile.role)));document.querySelectorAll('[data-audit="true"]').forEach(b=>b.classList.toggle('hidden',!['super_admin','general_manager'].includes(profile.role)));navigate('overview');}
+ async function loadProfile(){const {data,error}=await db.from('profiles').select('id,full_name,role,is_active,must_change_password').eq('id',user.id).single();if(error||!data)throw new Error('Your staff profile could not be found. Contact a Koetsa administrator.');profile=data;if(!data.is_active)throw new Error('This account is suspended. Contact a Koetsa administrator.');}
+ async function continueAfterLogin(){await loadProfile();if(profile.must_change_password){showFirstPassword();return;}showApp();}
+ $('#first-password-form').addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.currentTarget),password=String(f.get('password')||''),confirm=String(f.get('confirm_password')||''),btn=e.currentTarget.querySelector('button');if(password.length<10){msg('Use at least 10 characters.','#first-password-message');return;}if(password!==confirm){msg('The passwords do not match.','#first-password-message');return;}btn.disabled=true;msg('Updating your password…','#first-password-message');try{const {error}=await db.auth.updateUser({password});if(error)throw error;const done=await db.rpc('complete_staff_first_login');if(done.error)throw done.error;profile.must_change_password=false;msg('Password updated successfully. Welcome to Koetsa.','#first-password-message');showApp();}catch(err){msg('Password update could not be completed: '+err.message,'#first-password-message');}finally{btn.disabled=false;}});
+
+ async function bootSession(){const {data:{session}}=await db.auth.getSession();if(session){user=session.user;try{await continueAfterLogin()}catch(e){await db.auth.signOut();showLogin();msg(e.message,'#login-message')}}else showLogin();}
+ $('#login-form').addEventListener('submit',async e=>{e.preventDefault();if(!ready){msg('Portal setup is incomplete. Configure Supabase in portal/config.js first.','#login-message');return;}const f=new FormData(e.currentTarget);const btn=e.currentTarget.querySelector('button');btn.disabled=true;msg('Signing in…','#login-message');const {data,error}=await db.auth.signInWithPassword({email:f.get('email'),password:f.get('password')});btn.disabled=false;if(error){msg('Sign-in failed. Check your credentials or contact the administrator.','#login-message');return;}user=data.user;try{await continueAfterLogin()}catch(err){await db.auth.signOut();msg(err.message,'#login-message')}});
  $('#logout-button').addEventListener('click',async()=>{await db.auth.signOut();user=null;profile=null;showLogin();msg('You have signed out.','#login-message')});
  $('#side-nav').addEventListener('click',e=>{const b=e.target.closest('button[data-page]');if(b)navigate(b.dataset.page)});
  function navigate(page){currentPage=page;document.querySelectorAll('#side-nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));const titles={overview:'Operations overview',leads:'Sales & leads',customers:'Customer records',vehicles:'Vehicle register',installations:'Installation management',subscriptions:'Subscriptions',payments:'Payment records',team:'Staff & access'};$('#page-title').textContent=titles[page]||'Operations';renderPage();}
@@ -50,10 +54,10 @@
  async function team(root){
   const isTopManager=['super_admin','general_manager'].includes(profile.role);
   if(!isTopManager){root.innerHTML='<div class="notice">Staff administration is restricted to the Super Admin and General Manager.</div>';return;}
-  const {data,error}=await db.from('profiles').select('id,full_name,email,phone,department,job_title,employment_start_date,role,is_active,created_at').order('created_at',{ascending:false});
+  const {data,error}=await db.from('profiles').select('id,full_name,email,phone,department,job_title,employment_start_date,role,is_active,must_change_password,created_at').order('created_at',{ascending:false});
   root.innerHTML=`<div class="panel"><div class="panel-head"><h2>Staff & workforce directory</h2><span class="staff-badge">${(data||[]).length} staff profiles</span></div>
-  <p class="staff-hint">Invite employees, maintain their employment details and control portal access here. Invitations are sent by email. Employees set their own password; managers never need to know it.</p>
-  <div class="staff-form"><h3>Invite a new employee</h3><form id="invite-staff-form" class="form-grid">
+  <p class="staff-hint">Create employee accounts directly. Each account is active immediately. The system generates a temporary password, which you give to the employee. They must change it the first time they sign in.</p>
+  <div class="staff-form"><h3>Register a new employee</h3><form id="create-staff-form" class="form-grid">
   <div class="field"><label>Full name<input name="full_name" required maxlength="120"></label></div>
   <div class="field"><label>Work email<input name="email" type="email" required maxlength="160"></label></div>
   <div class="field"><label>Phone / WhatsApp<input name="phone" maxlength="40"></label></div>
@@ -61,26 +65,28 @@
   <div class="field"><label>Job title<input name="job_title" required maxlength="100" placeholder="e.g. Sales Consultant"></label></div>
   <div class="field"><label>Employment start date<input name="employment_start_date" type="date"></label></div>
   <div class="field"><label>Portal role<select name="role">${Object.entries(roleLabels).filter(([k])=>profile.role==='super_admin'||k!=='super_admin').map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></label></div>
-  <div class="field full"><button class="primary inline" type="submit">Send employee invitation</button></div></form>
-  <p class="staff-hint">The employee will receive a secure invitation link. The account remains inactive until management activates it after the employee accepts.</p></div>
-  <div id="team-table"></div></div>`;
+  <div class="field full"><button class="primary inline" type="submit">Create active employee account</button></div></form>
+  <p class="staff-hint">The temporary password is displayed once after creation. Share it directly and securely with the employee; it is not saved in the staff directory.</p></div>
+  <div id="new-staff-credentials" class="hidden"></div><div id="team-table"></div></div>`;
   if(error){$('#team-table').textContent='Could not load staff: '+error.message;return;}
   const el=$('#team-table');
   const roleOptions=(selected)=>Object.entries(roleLabels).filter(([k])=>profile.role==='super_admin'||k!=='super_admin').map(([k,v])=>`<option value="${k}" ${selected===k?'selected':''}>${v}</option>`).join('');
-  el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Employee</th><th>Contact</th><th>Department / title</th><th>Role</th><th>Start date</th><th>Portal access</th><th>Save</th></tr></thead><tbody>${(data||[]).map(x=>`<tr>
+  el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Employee</th><th>Contact</th><th>Department / title</th><th>Role</th><th>Start date</th><th>Account status</th><th>Save</th></tr></thead><tbody>${(data||[]).map(x=>`<tr>
   <td><input data-name-user="${x.id}" value="${esc(x.full_name||'')}" placeholder="Full name" style="max-width:150px"><br><small>${esc(x.email||'')}</small></td>
   <td><input data-phone-user="${x.id}" value="${esc(x.phone||'')}" placeholder="Phone" style="max-width:130px"></td><td><input data-dept-user="${x.id}" value="${esc(x.department||'')}" placeholder="Department" style="max-width:130px"><br><input data-title-user="${x.id}" value="${esc(x.job_title||'')}" placeholder="Job title" style="max-width:130px"></td>
   <td><select data-role-user="${x.id}">${roleOptions(x.role)}</select></td>
   <td><input type="date" data-start-user="${x.id}" value="${esc(x.employment_start_date||'')}" style="max-width:135px"></td>
-  <td><label><input type="checkbox" data-active-user="${x.id}" ${x.is_active?'checked':''}> ${x.is_active?'Active':'Suspended'}</label></td>
+  <td><label><input type="checkbox" data-active-user="${x.id}" ${x.is_active?'checked':''}> ${x.is_active?'Active':'Suspended'}</label><br><small>${x.must_change_password?'Must change password':'Password set'}</small></td>
   <td><button class="secondary" data-save-user="${x.id}">Save</button></td></tr>`).join('')}</tbody></table></div>`;
-  $('#invite-staff-form').onsubmit=async e=>{
-   e.preventDefault();const form=e.currentTarget,btn=form.querySelector('button[type=submit]');const values=Object.fromEntries(new FormData(form));btn.disabled=true;btn.textContent='Sending invitation…';
+  $('#create-staff-form').onsubmit=async e=>{
+   e.preventDefault();const form=e.currentTarget,btn=form.querySelector('button[type=submit]');const values=Object.fromEntries(new FormData(form));btn.disabled=true;btn.textContent='Creating account…';
    try{const {data:{session}}=await db.auth.getSession();if(!session)throw new Error('Your session has expired. Sign in again.');
     const response=await fetch(cfg.supabaseUrl+'/functions/v1/koetsa-invite-staff',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token,'apikey':cfg.supabaseAnonKey},body:JSON.stringify(values)});
-    const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||'Invitation could not be sent.');
-    msg('Invitation sent to '+values.email+'. The employee must accept the email invitation before their account can be activated.');form.reset();navigate('team');
-   }catch(err){msg('Employee invitation failed: '+err.message);}finally{btn.disabled=false;btn.textContent='Send employee invitation';}
+    const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||'Employee account could not be created.');
+    const box=$('#new-staff-credentials');box.classList.remove('hidden');box.innerHTML=`<div class="credential-panel"><h3>Employee account created successfully</h3><p><b>Email:</b> ${esc(result.email||values.email)}</p><label>Temporary password<input id="new-temp-password" readonly value="${esc(result.temporary_password||'')}"></label><p class="staff-hint">This account is active immediately. Give these login details to the employee securely. They will be required to change this password at first sign-in.</p><button type="button" class="secondary" id="copy-temp-password">Copy temporary password</button></div>`;
+    $('#copy-temp-password').onclick=async()=>{const input=$('#new-temp-password');try{await navigator.clipboard.writeText(input.value);msg('Temporary password copied. Share it securely.');}catch{input.select();msg('Select and copy the temporary password manually.');}};
+    form.reset();msg('Active employee account created. Temporary password is shown above.');
+   }catch(err){msg('Employee account creation failed: '+err.message);}finally{btn.disabled=false;btn.textContent='Create active employee account';}
   };
   el.querySelectorAll('[data-save-user]').forEach(btn=>btn.onclick=async()=>{
    const id=btn.dataset.saveUser,role=el.querySelector(`[data-role-user="${id}"]`).value,is_active=el.querySelector(`[data-active-user="${id}"]`).checked;
